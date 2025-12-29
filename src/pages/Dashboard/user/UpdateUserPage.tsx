@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getMe } from "../../../api/user.service";
+import { getMe, update } from "../../../api/user.service";
 import type { UpdatePayload } from "../../../types/user";
 
 export function UpdateUserPage() {
@@ -18,10 +18,16 @@ export function UpdateUserPage() {
     fetchUser();
   }, []);
 
+  async function handleSubmit(e: React.FormEvent) {
+    const me = await getMe();
+    e.preventDefault();
+    await update(me.id, user);
+  }
+
   return (
     <div>
       <h1>Atualizar Perfil</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Nome"

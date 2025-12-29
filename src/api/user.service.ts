@@ -8,7 +8,7 @@ export async function register(data: RegisterPayload) {
 }
 
 export async function update(id: number, data: UpdatePayload) {
-    const response = await api.put(`/users/${id}`, data);
+    const response = await api.patch(`/users/${id}`, data);
     return response.data;
 }
 
