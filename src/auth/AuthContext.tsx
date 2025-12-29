@@ -17,7 +17,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function login(email: string, password: string) {
     const data = await loginService({ username: email, password });
     localStorage.setItem("access_token", data.access_token);
-    localStorage.setItem("refresh_token", data.refresh_token);
     setIsAuthenticated(true);
   }
 

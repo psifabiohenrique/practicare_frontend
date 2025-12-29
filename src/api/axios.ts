@@ -3,6 +3,7 @@ import { forceLogout } from "../utils/logout";
 
 export const api = axios.create({
   baseURL: "http://localhost:8000/",
+  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
@@ -14,39 +15,28 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  response => response, 
-  async error => {
+  (response) => response,
+  async (error) => {
     const originalRequest = error.config;
 
-    if(error.response?.status == 403 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const refreshToken = localStorage.getItem("refresh_token");
-      if(!refreshToken) {
-        forceLogout();
-        return Promise.reject(error);
-      }
-
       try {
-        const response = await api.post("/auth/refresh", {
-          refresh_token: refreshToken,
-        });
+        const response = await api.post("/auth/refresh/");
 
         const newAccessToken = response.data.access_token;
-        const newRefreshToken = response.data.refresh_token;
-
         localStorage.setItem("access_token", newAccessToken);
-        localStorage.setItem("refresh_token", newRefreshToken);
 
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return api(originalRequest);
-      } catch {
+      } catch (refreshError) {
         forceLogout();
-        return Promise.reject(error);
+        return Promise.reject(refreshError);
       }
     }
 
     return Promise.reject(error);
   }
-)
+);
