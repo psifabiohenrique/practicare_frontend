@@ -3,16 +3,18 @@ import { useAuth } from "../../auth/AuthContext";
 import TextField from "../../components/TextField/TextField";
 import Button from "../../components/Button/Button";
 import Form from "../../components/Form/Form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function LoginPage() {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     await login(email, password);
+    navigate("/");
   }
 
   return (
