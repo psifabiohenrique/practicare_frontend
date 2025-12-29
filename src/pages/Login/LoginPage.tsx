@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../auth/AuthContext";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import TextField from "../../components/TextField/TextField";
+import Button from "../../components/Button/Button";
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -13,53 +14,22 @@ export function LoginPage() {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          p: 4,
-          border: "1px solid #ddd",
-          borderRadius: 2,
-          boxShadow: 3,
-          backgroundColor: "#ddd",
-        }}
-      >
-        <Typography component="h1" variant="h5" gutterBottom color="black">
-          Acesse sua Conta
-        </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ mt: 3, width: "100%", justifyItems: "center"}}
-        >
-          <TextField
-            id="outlined-basic"
-            label="Email"
-            variant="outlined"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            sx={{pt: 2}}
-            required
-          />
-          <TextField
-            id="outlined-basic"
-            label="Senha"
-            variant="outlined"
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            sx={{pt: 2}}
-            required
-          />
-          <Button type="submit" variant="contained" sx={{ display: "flex", mt: 2 }}>
-            Entrar
-          </Button>
-        </Box>
-      </Box>
-    </Container>
+    <form onSubmit={handleSubmit}>
+      <TextField
+        label="Email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <TextField
+        label="Senha"
+        placeholder="Senha"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <Button type="submit">Entrar</Button>
+    </form>
   );
 }
