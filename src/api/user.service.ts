@@ -11,3 +11,8 @@ export async function update(id: number, data: UpdatePayload) {
     const response = await api.put(`/users/${id}`, data);
     return response.data;
 }
+
+export async function getMe() {
+    const response = await api.get("/users/me");
+    return response.data;
+}

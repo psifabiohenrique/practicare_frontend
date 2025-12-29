@@ -53,6 +53,9 @@ export function MainLayout({ children }: MainLayoutProps) {
               <Link to="#">Agenda de Sessões</Link>
             </li>
             <li>
+              <Link to="/user">Atualizar Perfil</Link>
+            </li>
+            <li>
               <button onClick={logout}>Logout</button>
             </li>
           </ul>
