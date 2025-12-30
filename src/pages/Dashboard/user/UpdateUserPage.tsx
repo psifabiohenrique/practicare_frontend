@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
-import { getMe, update } from "../../../api/user.service";
+import { useEffect, useState } from "react";
+import { update } from "../../../api/user.service";
 import type { UpdatePayload } from "../../../types/user";
 import TextField from "../../../components/TextField/TextField";
 import Button from "../../../components/Button/Button";
+import { useUser } from "../../../hooks/useUser";
+import { useQueryClient } from "@tanstack/react-query";
+import { MessageCard } from "../../../components/MessageCard/MessageCard";
 
 export function UpdateUserPage() {
   const [user, setUser] = useState<UpdatePayload>({
@@ -12,23 +15,41 @@ export function UpdateUserPage() {
     password_confirmation: undefined,
   });
 
+  const { data: me, isLoading } = useUser();
+  const [message, setMessage] = useState<string>("");
+  const [showMessage, setShowMessage] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+
   useEffect(() => {
-    const fetchUser = async () => {
-      const response = await getMe();
-      setUser(response);
-    };
-    fetchUser();
-  }, []);
+    if (me) {
+      setUser({
+        name: me.name,
+        email: me.email,
+      });
+    }
+  }, [me]);
 
   async function handleSubmit(e: React.FormEvent) {
-    const me = await getMe();
     e.preventDefault();
-    await update(me.id, user);
+    try {
+      await update(me.id, user);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      setMessage("Perfil atualizado com sucesso!");
+      setShowMessage(true);
+    } catch (error) {
+      setMessage("Erro ao atualizar perfil");
+      setShowMessage(true);
+    }
+  }
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
   }
 
   return (
     <div>
       <h1>Atualizar Perfil</h1>
+      {showMessage && <MessageCard title="Sucesso" message={message} />}
       <form onSubmit={handleSubmit}>
         <TextField
           type="text"
