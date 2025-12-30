@@ -7,6 +7,8 @@ import { MainLayout } from "../layouts/MainLayout";
 import { UpdateUserPage } from "../pages/Dashboard/user/UpdateUserPage";
 import { PatientListPage } from "../pages/Dashboard/patients/PatientListPage";
 import { PatientCreatePage } from "../pages/Dashboard/patients/PatientCreatePage";
+import { PatientDetailPage } from "../pages/Dashboard/patients/PatientDetailPage";
+import { PatientUpdatePage } from "../pages/Dashboard/patients/PatientUpdatePage";
 import { SessionSchedulePage } from "../pages/Dashboard/schedule/SessionSchedulePage";
 
 export function AppRoutes() {
@@ -50,6 +52,26 @@ export function AppRoutes() {
           <PrivateRoute>
             <MainLayout>
               <PatientCreatePage />
+            </MainLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/patient/:id"
+        element={
+          <PrivateRoute>
+            <MainLayout>
+              <PatientDetailPage />
+            </MainLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/patient/:id/edit"
+        element={
+          <PrivateRoute>
+            <MainLayout>
+              <PatientUpdatePage />
             </MainLayout>
           </PrivateRoute>
         }

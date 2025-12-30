@@ -9,10 +9,10 @@ export function PatientListCard({ patient }: PatientListCardProps) {
   return (
     <tr key={patient.id}>
       <td>
-        <Link to={`/patients/${patient.id}`}>{patient.patient.full_name}</Link>
+        <Link to={`/patient/${patient.id}`}>{patient.patient.full_name}</Link>
       </td>
       <td>
-        <Link to={`/patients/${patient.id}`}>{patient.patient.birth_date}</Link>
+        <Link to={`/patient/${patient.id}`}>{patient.patient.birth_date}</Link>
       </td>
       <td>{patient.patient.phone}</td>
     </tr>

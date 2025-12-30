@@ -10,3 +10,16 @@ export async function createPatient(payload: PatientPayload): Promise<Patient> {
   const response = await api.post("/patients-with-treatment/", payload);
   return response.data;
 }
+
+export async function getPatient(id: number): Promise<Patient> {
+  const response = await api.get(`/patients-with-treatment/${id}/`);
+  return response.data;
+}
+
+export async function updatePatient(
+  id: number,
+  payload: PatientPayload
+): Promise<Patient> {
+  const response = await api.patch(`/patients-with-treatment/${id}/`, payload);
+  return response.data;
+}
