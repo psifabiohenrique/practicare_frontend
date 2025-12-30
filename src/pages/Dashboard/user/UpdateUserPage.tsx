@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getMe, update } from "../../../api/user.service";
 import type { UpdatePayload } from "../../../types/user";
+import TextField from "../../../components/TextField/TextField";
 
 export function UpdateUserPage() {
   const [user, setUser] = useState<UpdatePayload>({
@@ -28,27 +29,31 @@ export function UpdateUserPage() {
     <div>
       <h1>Atualizar Perfil</h1>
       <form onSubmit={handleSubmit}>
-        <input
+        <TextField
           type="text"
           placeholder="Nome"
+          label="Nome"
           value={user.name}
           onChange={(e) => setUser({ ...user, name: e.target.value })}
         />
-        <input
+        <TextField
           type="email"
           placeholder="Email"
+          label="Email"
           value={user.email}
           onChange={(e) => setUser({ ...user, email: e.target.value })}
         />
-        <input
+        <TextField
           type="password"
           placeholder="Senha"
+          label="Senha"
           value={user.password}
           onChange={(e) => setUser({ ...user, password: e.target.value })}
         />
-        <input
+        <TextField
           type="password"
           placeholder="Confirmar Senha"
+          label="Confirmar Senha"
           value={user.password_confirmation}
           onChange={(e) =>
             setUser({ ...user, password_confirmation: e.target.value })

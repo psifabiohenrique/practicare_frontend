@@ -37,6 +37,7 @@ export function RegisterPage() {
         <TextField
           label="Senha"
           placeholder="Senha"
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -44,6 +45,7 @@ export function RegisterPage() {
         <TextField
           label="Confirmar Senha"
           placeholder="Confirmar Senha"
+          type="password"
           value={password_confirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           required

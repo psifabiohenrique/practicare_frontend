@@ -29,6 +29,7 @@ export function LoginPage() {
           required
         />
         <TextField
+          type="password"
           label="Senha"
           placeholder="Senha"
           value={password}

@@ -3,7 +3,8 @@ import styles from "./text-field.module.css";
 interface TextFieldProps {
   label: string;
   placeholder?: string;
-  value: string;
+  type?: string;
+  value?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
 }
@@ -11,6 +12,7 @@ interface TextFieldProps {
 export default function TextField({
   label,
   placeholder,
+  type,
   value,
   onChange,
   required,
@@ -19,7 +21,7 @@ export default function TextField({
     <div className={styles.container}>
       <label>{label}</label>
       <input
-        type="text"
+        type={type}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
