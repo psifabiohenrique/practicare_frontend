@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getMe, update } from "../../../api/user.service";
 import type { UpdatePayload } from "../../../types/user";
 import TextField from "../../../components/TextField/TextField";
+import Button from "../../../components/Button/Button";
 
 export function UpdateUserPage() {
   const [user, setUser] = useState<UpdatePayload>({
@@ -59,7 +60,7 @@ export function UpdateUserPage() {
             setUser({ ...user, password_confirmation: e.target.value })
           }
         />
-        <button type="submit">Atualizar</button>
+        <Button type="submit">Atualizar</Button>
       </form>
     </div>
   );
