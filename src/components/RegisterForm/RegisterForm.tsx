@@ -52,6 +52,7 @@ export function RegisterForm() {
         label="Email"
         placeholder="Email"
         value={email}
+        type="email"
         onChange={(e) => setEmail(e.target.value)}
         required
       />
