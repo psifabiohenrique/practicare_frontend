@@ -44,13 +44,13 @@ export function MainLayout({ children }: MainLayoutProps) {
               <Link to="/">Dashboard</Link>
             </li>
             <li>
-              <Link to="#">Pacientes</Link>
+              <Link to="/patient">Pacientes</Link>
             </li>
             <li>
-              <Link to="#">Novo Paciente</Link>
+              <Link to="/patient/create">Novo Paciente</Link>
             </li>
             <li>
-              <Link to="#">Agenda de Sessões</Link>
+              <Link to="/schedule">Agenda de Sessões</Link>
             </li>
             <li>
               <Link to="/user">Atualizar Perfil</Link>

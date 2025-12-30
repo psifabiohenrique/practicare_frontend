@@ -5,6 +5,9 @@ import { PrivateRoute } from "../auth/PrivateRoute";
 import { DashboardPage } from "../pages/Dashboard/DashboardPage";
 import { MainLayout } from "../layouts/MainLayout";
 import { UpdateUserPage } from "../pages/Dashboard/user/UpdateUserPage";
+import { PatientListPage } from "../pages/Dashboard/patients/PatientListPage";
+import { PatientCreatePage } from "../pages/Dashboard/patients/PatientCreatePage";
+import { SessionSchedulePage } from "../pages/Dashboard/schedule/SessionSchedulePage";
 
 export function AppRoutes() {
   return (
@@ -27,6 +30,36 @@ export function AppRoutes() {
           <PrivateRoute>
             <MainLayout>
               <UpdateUserPage />
+            </MainLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/patient"
+        element={
+          <PrivateRoute>
+            <MainLayout>
+              <PatientListPage />
+            </MainLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/patient/create"
+        element={
+          <PrivateRoute>
+            <MainLayout>
+              <PatientCreatePage />
+            </MainLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/schedule"
+        element={
+          <PrivateRoute>
+            <MainLayout>
+              <SessionSchedulePage />
             </MainLayout>
           </PrivateRoute>
         }
