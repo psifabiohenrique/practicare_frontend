@@ -4,22 +4,36 @@ import TextField from "../../components/TextField/TextField";
 import Button from "../../components/Button/Button";
 import Form from "../../components/Form/Form";
 import { Link, useNavigate } from "react-router-dom";
+import { MessageCard } from "../../components/MessageCard/MessageCard";
 
 export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState<{
+    title: string;
+    message: string;
+  } | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
+    setMessage(null);
     e.preventDefault();
-    await login(email, password);
-    navigate("/");
+    try {
+      await login(email, password);
+      setMessage({ title: "Sucesso", message: "Login realizado com sucesso!" });
+      navigate("/");
+    } catch (error) {
+      setMessage({ title: "Erro", message: "Erro ao fazer login" });
+    }
   }
 
   return (
     <>
       <h1>Login</h1>
+      {message && (
+        <MessageCard title={message.title} message={message.message} />
+      )}
       <Form onSubmit={handleSubmit}>
         <TextField
           label="Email"

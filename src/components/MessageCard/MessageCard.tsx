@@ -1,12 +1,12 @@
 type MessageCardProps = {
-  title: string;
+  title?: string;
   message: string;
 };
 
 export function MessageCard({ title, message }: MessageCardProps) {
   return (
     <div>
-      <h4>{title}</h4>
+      {title && <h4>{title}</h4>}
       <p>{message}</p>
     </div>
   );
