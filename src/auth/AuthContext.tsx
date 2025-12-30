@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { login as loginService } from "../api/auth.service";
+import { logout as logoutService } from "../api/auth.service";
 
 interface AuthContextData {
   isAuthenticated: boolean;
@@ -22,6 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   function logout() {
     localStorage.removeItem("access_token");
+    logoutService();
     setIsAuthenticated(false);
   }
 
