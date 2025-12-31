@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getPatient } from "../../../api/patient.service";
 import type { Patient } from "../../../types/patient";
+import {
+  formatDate,
+  formatTime,
+  translateWeekday,
+} from "../../../utils/formatters";
+import Button from "../../../components/Button/Button";
 
 export function PatientDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,7 +29,9 @@ export function PatientDetailPage() {
     <div>
       <h1>Detalhes do Paciente</h1>
       <Link to="/patient">Voltar para lista</Link>
-      <Link to={`/patient/${id}/edit`}>Editar</Link>
+      <Button>
+        <Link to={`/patient/${id}/edit`}>Editar</Link>
+      </Button>
 
       <section>
         <h3>Dados Pessoais</h3>
@@ -37,17 +45,19 @@ export function PatientDetailPage() {
           <strong>Telefone:</strong> {patient.patient.phone}
         </p>
         <p>
-          <strong>Data de Nascimento:</strong> {patient.patient.birth_date}
+          <strong>Data de Nascimento:</strong>{" "}
+          {formatDate(patient.patient.birth_date)}
         </p>
       </section>
 
       <section>
         <h3>Dados do Tratamento</h3>
         <p>
-          <strong>Dia da Semana:</strong> {patient.weekday}
+          <strong>Dia da Semana:</strong> {translateWeekday(patient.weekday)}
         </p>
         <p>
-          <strong>Horário:</strong> {patient.start_time} - {patient.end_time}
+          <strong>Horário:</strong> {formatTime(patient.start_time)} -{" "}
+          {formatTime(patient.end_time)}
         </p>
       </section>
     </div>
