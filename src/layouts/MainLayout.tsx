@@ -22,6 +22,11 @@ export function MainLayout({ children }: MainLayoutProps) {
   );
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleFetchDaily = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchDaily();
+  };
+
   const fetchDaily = async () => {
     setIsLoading(true);
     try {
@@ -59,24 +64,28 @@ export function MainLayout({ children }: MainLayoutProps) {
         }}
       >
         <h3>Tratamentos do Dia</h3>
-        <SelectField
-          label="Dia"
-          value={selectedWeekday}
-          onChange={(e) => setSelectedWeekday(e.target.value as Weekdays)}
-          options={weekdayOptions}
-        />
-        <Button onClick={fetchDaily}>Atualizar</Button>
+        <form onSubmit={handleFetchDaily}>
+          <SelectField
+            label="Dia"
+            value={selectedWeekday}
+            onChange={(e) => setSelectedWeekday(e.target.value as Weekdays)}
+            options={weekdayOptions}
+          />
+          <Button type="submit">Atualizar</Button>
+        </form>
 
         {isLoading ? (
           <p>Carregando...</p>
         ) : (
           <ul style={{ listStyle: "none", padding: 0, marginTop: "1rem" }}>
             {dailyTreatments.map((t) => (
-              <li key={t.uuid} style={{ marginBottom: "1rem" }}>
-                <strong>{t.patient.first_name}</strong>
-                <br />
-                {formatTime(t.start_time)} - {formatTime(t.end_time)}
-              </li>
+              <Link to={`/patient/${t.uuid}`}>
+                <li key={t.uuid} style={{ marginBottom: "1rem" }}>
+                  <strong>{t.patient.first_name}</strong>
+                  <br />
+                  {formatTime(t.start_time)} - {formatTime(t.end_time)}
+                </li>
+              </Link>
             ))}
             {dailyTreatments.length === 0 && <p>Nenhum paciente hoje.</p>}
           </ul>

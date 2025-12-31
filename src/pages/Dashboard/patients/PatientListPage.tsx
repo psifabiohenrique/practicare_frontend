@@ -38,7 +38,7 @@ export function PatientListPage() {
 
   useEffect(() => {
     fetchPatients();
-  }, [params]);
+  }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setParams({ ...params, search: e.target.value, skip: 0 });
@@ -84,7 +84,8 @@ export function PatientListPage() {
     <div>
       <h1>Lista de Pacientes</h1>
 
-      <div
+      <form
+        onSubmit={fetchPatients}
         style={{
           display: "flex",
           gap: "1rem",
@@ -110,7 +111,8 @@ export function PatientListPage() {
           onChange={handleWeekdayChange}
           options={weekdayOptions}
         />
-      </div>
+        <Button type="submit">Buscar</Button>
+      </form>
 
       {isLoading ? (
         <div>Carregando...</div>
