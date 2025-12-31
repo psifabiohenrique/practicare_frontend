@@ -32,7 +32,7 @@ export function UpdateUserPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      await update(me.id, user);
+      await update(me.uuid, user);
       queryClient.invalidateQueries({ queryKey: ["user"] });
       setMessage("Perfil atualizado com sucesso!");
       setShowMessage(true);

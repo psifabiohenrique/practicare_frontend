@@ -10,17 +10,17 @@ import {
 import Button from "../../../components/Button/Button";
 
 export function PatientDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const { uuid } = useParams<{ uuid: string }>();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (id) {
-      getPatient(Number(id))
+    if (uuid) {
+      getPatient(uuid)
         .then(setPatient)
         .finally(() => setIsLoading(false));
     }
-  }, [id]);
+  }, [uuid]);
 
   if (isLoading) return <div>Carregando...</div>;
   if (!patient) return <div>Paciente não encontrado.</div>;
@@ -30,7 +30,7 @@ export function PatientDetailPage() {
       <h1>Detalhes do Paciente</h1>
       <Link to="/patient">Voltar para lista</Link>
       <Button>
-        <Link to={`/patient/${id}/edit`}>Editar</Link>
+        <Link to={`/patient/${uuid}/edit`}>Editar</Link>
       </Button>
 
       <section>

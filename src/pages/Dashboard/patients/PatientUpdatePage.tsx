@@ -5,23 +5,23 @@ import { PatientForm } from "../../../components/PatientForm/PatientForm";
 import type { Patient, PatientPayload } from "../../../types/patient";
 
 export function PatientUpdatePage() {
-  const { id } = useParams<{ id: string }>();
+  const { uuid } = useParams<{ uuid: string }>();
   const navigate = useNavigate();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (id) {
-      getPatient(Number(id))
+    if (uuid) {
+      getPatient(uuid)
         .then(setPatient)
         .finally(() => setIsLoading(false));
     }
-  }, [id]);
+  }, [uuid]);
 
   async function handleUpdate(payload: PatientPayload) {
-    if (id) {
-      await updatePatient(Number(id), payload);
-      navigate(`/patient/${id}`);
+    if (uuid) {
+      await updatePatient(uuid, payload);
+      navigate(`/patient/${uuid}`);
     }
   }
 

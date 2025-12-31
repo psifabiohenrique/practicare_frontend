@@ -8,12 +8,12 @@ interface PatientListCardProps {
 
 export function PatientListCard({ patient }: PatientListCardProps) {
   return (
-    <tr key={patient.id}>
+    <tr key={patient.uuid}>
       <td>
-        <Link to={`/patient/${patient.id}`}>{patient.patient.full_name}</Link>
+        <Link to={`/patient/${patient.uuid}`}>{patient.patient.full_name}</Link>
       </td>
       <td>
-        <Link to={`/patient/${patient.id}`}>
+        <Link to={`/patient/${patient.uuid}`}>
           {translateWeekday(patient.weekday)}
         </Link>
       </td>

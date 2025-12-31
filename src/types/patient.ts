@@ -1,10 +1,9 @@
 export interface Patient {
   user_uuid: string;
-  patient_id: string;
+  patient_uuid: string;
   weekday: string;
   start_time: string;
   end_time: string;
-  id: number;
   uuid: string;
   patient: {
     first_name: string;
@@ -12,7 +11,6 @@ export interface Patient {
     email: string;
     phone: string;
     birth_date: string;
-    id: number;
     uuid: string;
     full_name: string;
   };
@@ -28,7 +26,7 @@ export interface PatientPayload {
   };
   treatment_schema: {
     user_uuid: string;
-    patient_id: string;
+    patient_uuid: string;
     weekday: string;
     start_time: string;
     end_time: string;
@@ -45,7 +43,7 @@ export interface PatientUpdatePayload extends Partial<Patient> {
   };
   treatment_schema?: {
     user_uuid?: string;
-    patient_id?: string;
+    patient_uuid?: string;
     weekday?: string;
     start_time?: string;
     end_time?: string;

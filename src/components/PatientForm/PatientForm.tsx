@@ -64,7 +64,7 @@ export function PatientForm({
       },
       treatment_schema: {
         user_uuid: initialData?.user_uuid || "",
-        patient_id: initialData?.patient_id || "",
+        patient_uuid: initialData?.patient_uuid || "",
         weekday,
         start_time: startTime,
         end_time: endTime,

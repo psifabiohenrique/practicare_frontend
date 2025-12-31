@@ -57,7 +57,7 @@ export function AppRoutes() {
         }
       />
       <Route
-        path="/patient/:id"
+        path="/patient/:uuid"
         element={
           <PrivateRoute>
             <MainLayout>
@@ -67,7 +67,7 @@ export function AppRoutes() {
         }
       />
       <Route
-        path="/patient/:id/edit"
+        path="/patient/:uuid/edit"
         element={
           <PrivateRoute>
             <MainLayout>

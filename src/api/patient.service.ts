@@ -11,15 +11,15 @@ export async function createPatient(payload: PatientPayload): Promise<Patient> {
   return response.data;
 }
 
-export async function getPatient(id: number): Promise<Patient> {
-  const response = await api.get(`/patients-with-treatment/${id}/`);
+export async function getPatient(uuid: string): Promise<Patient> {
+  const response = await api.get(`/patients-with-treatment/${uuid}`);
   return response.data;
 }
 
 export async function updatePatient(
-  id: number,
+  uuid: string,
   payload: PatientPayload
 ): Promise<Patient> {
-  const response = await api.patch(`/patients-with-treatment/${id}/`, payload);
+  const response = await api.patch(`/patients-with-treatment/${uuid}`, payload);
   return response.data;
 }

@@ -18,7 +18,7 @@ export function PatientTable({ data }: PatientTableProps) {
       <tbody>
         {data ? (
           data?.map((patient) => (
-            <PatientListCard key={patient.id} patient={patient} />
+            <PatientListCard key={patient.uuid} patient={patient} />
           ))
         ) : (
           <tr>
