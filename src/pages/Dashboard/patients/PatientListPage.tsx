@@ -24,6 +24,10 @@ export function PatientListPage() {
     order_dir: "asc",
   });
 
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    await fetchPatients();
+  }
   async function fetchPatients() {
     setIsLoading(true);
     try {
@@ -85,7 +89,7 @@ export function PatientListPage() {
       <h1>Lista de Pacientes</h1>
 
       <form
-        onSubmit={fetchPatients}
+        onSubmit={handleSubmit}
         style={{
           display: "flex",
           gap: "1rem",
