@@ -79,8 +79,8 @@ export function MainLayout({ children }: MainLayoutProps) {
         ) : (
           <ul style={{ listStyle: "none", padding: 0, marginTop: "1rem" }}>
             {dailyTreatments.map((t) => (
-              <Link to={`/patient/${t.uuid}`}>
-                <li key={t.uuid} style={{ marginBottom: "1rem" }}>
+              <Link to={`/patient/${t.uuid}`} key={t.uuid}>
+                <li style={{ marginBottom: "1rem" }}>
                   <strong>{t.patient.first_name}</strong>
                   <br />
                   {formatTime(t.start_time)} - {formatTime(t.end_time)}

@@ -5,7 +5,12 @@ import SelectField from "../SelectField/SelectField";
 import Button from "../Button/Button";
 import { MessageCard } from "../MessageCard/MessageCard";
 import { validatePatient } from "./patientValidation";
-import type { Patient, PatientPayload, Gender } from "../../types/patient";
+import type {
+  Patient,
+  PatientPayload,
+  Gender,
+  Weekdays,
+} from "../../types/patient";
 
 interface PatientFormProps {
   initialData?: Patient;
@@ -35,7 +40,9 @@ export function PatientForm({
     initialData?.patient.gender || "Other"
   );
 
-  const [weekday, setWeekday] = useState(initialData?.weekday || "");
+  const [weekday, setWeekday] = useState<Weekdays>(
+    initialData?.weekday || "Monday"
+  );
   const [startTime, setStartTime] = useState(initialData?.start_time || "");
   const [endTime, setEndTime] = useState(initialData?.end_time || "");
 
@@ -70,7 +77,7 @@ export function PatientForm({
       treatment_schema: {
         user_uuid: initialData?.user_uuid || "",
         patient_uuid: initialData?.patient_uuid || "",
-        weekday: initialData?.weekday || "Monday",
+        weekday: weekday,
         start_time: startTime,
         end_time: endTime,
       },
@@ -93,7 +100,7 @@ export function PatientForm({
         setPhone("");
         setBirthDate("");
         setGender("Other");
-        setWeekday("");
+        setWeekday("Monday");
         setStartTime("");
         setEndTime("");
       }
@@ -174,7 +181,7 @@ export function PatientForm({
       <SelectField
         label="Dia da Semana"
         value={weekday}
-        onChange={(e) => setWeekday(e.target.value)}
+        onChange={(e) => setWeekday(e.target.value as Weekdays)}
         options={weekdayOptions}
         required
       />
