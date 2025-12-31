@@ -4,7 +4,6 @@ import type { UpdatePayload } from "../../../types/user";
 import TextField from "../../../components/TextField/TextField";
 import Button from "../../../components/Button/Button";
 import { useUser } from "../../../hooks/useUser";
-import { useQueryClient } from "@tanstack/react-query";
 import { MessageCard } from "../../../components/MessageCard/MessageCard";
 
 export function UpdateUserPage() {
@@ -15,10 +14,9 @@ export function UpdateUserPage() {
     password_confirmation: undefined,
   });
 
-  const { data: me, isLoading } = useUser();
+  const { data: me, isLoading, refetch } = useUser();
   const [message, setMessage] = useState<string>("");
   const [showMessage, setShowMessage] = useState<boolean>(false);
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (me) {
@@ -32,10 +30,12 @@ export function UpdateUserPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      await update(me.uuid, user);
-      queryClient.invalidateQueries({ queryKey: ["user"] });
-      setMessage("Perfil atualizado com sucesso!");
-      setShowMessage(true);
+      if (me) {
+        await update(me.uuid, user);
+        refetch();
+        setMessage("Perfil atualizado com sucesso!");
+        setShowMessage(true);
+      }
     } catch (error) {
       setMessage("Erro ao atualizar perfil");
       setShowMessage(true);

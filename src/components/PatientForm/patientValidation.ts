@@ -21,6 +21,9 @@ export function validatePatient(data: PatientPayload) {
   if (!data.patient_schema.birth_date) {
     errors.birth_date = "A data de nascimento é obrigatória.";
   }
+  if (!data.patient_schema.gender) {
+    errors.gender = "O gênero é obrigatório.";
+  }
 
   // Treatment Schema Validation
   if (!data.treatment_schema.weekday) {

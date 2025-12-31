@@ -5,7 +5,7 @@ import SelectField from "../SelectField/SelectField";
 import Button from "../Button/Button";
 import { MessageCard } from "../MessageCard/MessageCard";
 import { validatePatient } from "./patientValidation";
-import type { Patient, PatientPayload } from "../../types/patient";
+import type { Patient, PatientPayload, Gender } from "../../types/patient";
 
 interface PatientFormProps {
   initialData?: Patient;
@@ -31,6 +31,9 @@ export function PatientForm({
   const [birthDate, setBirthDate] = useState(
     initialData?.patient.birth_date || ""
   );
+  const [gender, setGender] = useState<Gender>(
+    initialData?.patient.gender || "Other"
+  );
 
   const [weekday, setWeekday] = useState(initialData?.weekday || "");
   const [startTime, setStartTime] = useState(initialData?.start_time || "");
@@ -45,6 +48,7 @@ export function PatientForm({
       setEmail(initialData.patient.email);
       setPhone(initialData.patient.phone);
       setBirthDate(initialData.patient.birth_date);
+      setGender(initialData.patient.gender);
       setWeekday(initialData.weekday);
       setStartTime(initialData.start_time);
       setEndTime(initialData.end_time);
@@ -61,11 +65,12 @@ export function PatientForm({
         email,
         phone,
         birth_date: birthDate,
+        gender,
       },
       treatment_schema: {
         user_uuid: initialData?.user_uuid || "",
         patient_uuid: initialData?.patient_uuid || "",
-        weekday,
+        weekday: initialData?.weekday || "Monday",
         start_time: startTime,
         end_time: endTime,
       },
@@ -87,6 +92,7 @@ export function PatientForm({
         setEmail("");
         setPhone("");
         setBirthDate("");
+        setGender("Other");
         setWeekday("");
         setStartTime("");
         setEndTime("");
@@ -104,6 +110,12 @@ export function PatientForm({
     { label: "Sexta-feira", value: "Friday" },
     { label: "Sábado", value: "Saturday" },
     { label: "Domingo", value: "Sunday" },
+  ];
+
+  const genderOptions = [
+    { label: "Masculino", value: "Male" },
+    { label: "Feminino", value: "Female" },
+    { label: "Outro", value: "Other" },
   ];
 
   return (
@@ -148,6 +160,13 @@ export function PatientForm({
         type="date"
         value={birthDate}
         onChange={(e) => setBirthDate(e.target.value)}
+        required
+      />
+      <SelectField
+        label="Gênero"
+        value={gender}
+        onChange={(e) => setGender(e.target.value as Gender)}
+        options={genderOptions}
         required
       />
 

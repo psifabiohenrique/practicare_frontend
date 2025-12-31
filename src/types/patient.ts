@@ -1,7 +1,18 @@
+export type Gender = "Male" | "Female" | "Other";
+
+export type Weekdays =
+  | "Monday"
+  | "Tuesday"
+  | "Wednesday"
+  | "Thursday"
+  | "Friday"
+  | "Saturday"
+  | "Sunday";
+
 export interface Patient {
   user_uuid: string;
   patient_uuid: string;
-  weekday: string;
+  weekday: Weekdays;
   start_time: string;
   end_time: string;
   uuid: string;
@@ -11,6 +22,7 @@ export interface Patient {
     email: string;
     phone: string;
     birth_date: string;
+    gender: Gender;
     uuid: string;
     full_name: string;
   };
@@ -23,29 +35,41 @@ export interface PatientPayload {
     email: string;
     phone: string;
     birth_date: string;
+    gender: Gender;
   };
   treatment_schema: {
     user_uuid: string;
     patient_uuid: string;
-    weekday: string;
+    weekday: Weekdays;
     start_time: string;
     end_time: string;
   };
 }
 
-export interface PatientUpdatePayload extends Partial<Patient> {
+export interface PatientUpdatePayload {
   patient_schema?: {
     first_name?: string;
     last_name?: string;
     email?: string;
     phone?: string;
     birth_date?: string;
+    gender?: Gender;
   };
   treatment_schema?: {
     user_uuid?: string;
     patient_uuid?: string;
-    weekday?: string;
+    weekday?: Weekdays;
     start_time?: string;
     end_time?: string;
   };
+}
+
+export interface PatientListParams {
+  skip?: number;
+  limit?: number;
+  order_by?: "name" | "birth_date";
+  order_dir?: "asc" | "desc";
+  gender?: Gender;
+  weekday?: Weekdays;
+  search?: string;
 }

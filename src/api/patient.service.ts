@@ -1,8 +1,24 @@
-import type { Patient, PatientPayload } from "../types/patient";
+import type {
+  Patient,
+  PatientPayload,
+  PatientListParams,
+  Weekdays,
+} from "../types/patient";
 import { api } from "./axios";
 
-export async function listPatients(): Promise<Patient[]> {
-  const response = await api.get("/patients-with-treatment/");
+export async function listPatients(
+  params?: PatientListParams
+): Promise<Patient[]> {
+  const response = await api.get("/patients-with-treatment/", { params });
+  return response.data;
+}
+
+export async function listDailyTreatments(
+  weekday: Weekdays
+): Promise<Patient[]> {
+  const response = await api.get("/patients-with-treatment/daily", {
+    params: { weekday },
+  });
   return response.data;
 }
 

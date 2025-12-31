@@ -6,6 +6,7 @@ import {
   formatDate,
   formatTime,
   translateWeekday,
+  translateGender,
 } from "../../../utils/formatters";
 import Button from "../../../components/Button/Button";
 
@@ -47,6 +48,9 @@ export function PatientDetailPage() {
         <p>
           <strong>Data de Nascimento:</strong>{" "}
           {formatDate(patient.patient.birth_date)}
+        </p>
+        <p>
+          <strong>Gênero:</strong> {translateGender(patient.patient.gender)}
         </p>
       </section>
 

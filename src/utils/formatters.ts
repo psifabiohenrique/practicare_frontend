@@ -28,3 +28,12 @@ const weekdayTranslations: Record<string, string> = {
 export function translateWeekday(weekday: string): string {
   return weekdayTranslations[weekday] || weekday;
 }
+const genderTranslations: Record<string, string> = {
+  Male: "Masculino",
+  Female: "Feminino",
+  Other: "Outro",
+};
+
+export function translateGender(gender: string): string {
+  return genderTranslations[gender] || gender;
+}
