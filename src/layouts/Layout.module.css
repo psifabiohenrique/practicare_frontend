@@ -1,7 +1,8 @@
 .layoutWrapper {
   display: flex;
   min-height: 100vh;
-  background-color: #fff;
+  background-color: var(--color-bg-app);
+  max-width: 95%;
 }
 
 .mainContent {
