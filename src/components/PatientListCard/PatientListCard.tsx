@@ -1,23 +1,33 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { Patient } from "../../types/patient";
 import { translateWeekday } from "../../utils/formatters";
+import styles from "./patient-list-card.module.css";
 
 interface PatientListCardProps {
   patient: Patient;
 }
 
 export function PatientListCard({ patient }: PatientListCardProps) {
+  const navigate = useNavigate();
+
   return (
-    <tr key={patient.uuid}>
-      <td>
-        <Link to={`/patient/${patient.uuid}`}>{patient.patient.full_name}</Link>
-      </td>
-      <td>
-        <Link to={`/patient/${patient.uuid}`}>
+    <li className={styles.card}>
+      <div
+        className={styles.cardHeader}
+        onClick={() => navigate(`/patient/${patient.uuid}`)}
+      >
+        <span className={styles.patientName}>{patient.patient.full_name}</span>
+        <span className={styles.weekday}>
           {translateWeekday(patient.weekday)}
-        </Link>
-      </td>
-      <td>{patient.patient.phone}</td>
-    </tr>
+        </span>
+      </div>
+      <div
+        className={styles.infoRow}
+        onClick={() => window.open(`https://wa.me/${patient.patient.phone}`)}
+      >
+        <span>📞</span>
+        <span className={styles.phone}>{patient.patient.phone}</span>
+      </div>
+    </li>
   );
 }

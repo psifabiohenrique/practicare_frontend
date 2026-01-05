@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PatientTable } from "../../../components/PatientTable/PatientTable";
+import { PatientList } from "../../../components/PatientList/PatientList";
 import { listPatients } from "../../../api/patient.service";
 import type {
   Patient,
@@ -10,6 +10,7 @@ import type {
 import TextField from "../../../components/TextField/TextField";
 import SelectField from "../../../components/SelectField/SelectField";
 import Button from "../../../components/Button/Button";
+import styles from "./PatientListPage.module.css";
 
 export function PatientListPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -45,13 +46,32 @@ export function PatientListPage() {
   }, []);
 
   const handleNameOrder = () => {
+    const nextDir = params.order_dir === "asc" ? "desc" : "asc";
     setParams({
       ...params,
       order_by: "name",
-      order_dir: params.order_dir === "asc" ? "desc" : "asc",
+      order_dir: nextDir,
       skip: 0,
     });
-    fetchPatients();
+    // We need to fetch with the updated params immediately
+    fetchPatientsWithParams({
+      ...params,
+      order_by: "name",
+      order_dir: nextDir,
+      skip: 0,
+    });
+  };
+
+  const fetchPatientsWithParams = async (p: PatientListParams) => {
+    setIsLoading(true);
+    try {
+      const data = await listPatients(p);
+      setPatients(data);
+    } catch (error) {
+      console.error("Erro ao buscar pacientes:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +96,7 @@ export function PatientListPage() {
 
   const handlePageChange = (newSkip: number) => {
     setParams({ ...params, skip: newSkip });
+    fetchPatientsWithParams({ ...params, skip: newSkip });
   };
 
   const genderOptions = [
@@ -95,18 +116,10 @@ export function PatientListPage() {
   ];
 
   return (
-    <div>
-      <h1>Lista de Pacientes</h1>
+    <div className={styles.pageContainer}>
+      <h1 className={styles.title}>Lista de Pacientes</h1>
 
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          gap: "1rem",
-          marginBottom: "1rem",
-          alignItems: "flex-end",
-        }}
-      >
+      <form onSubmit={handleSubmit} className={styles.filterForm}>
         <TextField
           label="Buscar por nome"
           value={params.search}
@@ -129,11 +142,16 @@ export function PatientListPage() {
       </form>
 
       {isLoading ? (
-        <div>Carregando...</div>
+        <div className={styles.loading}>Carregando...</div>
       ) : (
         <>
-          <PatientTable data={patients} onNameClick={handleNameOrder} />
-          <div style={{ marginTop: "1rem", display: "flex", gap: "0.5rem" }}>
+          <PatientList
+            data={patients}
+            onNameClick={handleNameOrder}
+            orderDir={params.order_dir}
+          />
+
+          <div className={styles.pagination}>
             <Button
               onClick={() =>
                 handlePageChange(Math.max(0, (params.skip || 0) - 25))

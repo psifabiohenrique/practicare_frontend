@@ -1,0 +1,36 @@
+.pageContainer {
+  padding: var(--space-md);
+}
+
+.title {
+  font-size: 2rem;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-lg);
+  text-align: left;
+}
+
+.filterForm {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl, 2rem);
+  align-items: flex-end;
+  flex-wrap: wrap;
+  background-color: var(--color-bg-surface);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.pagination {
+  margin-top: var(--space-xl, 2rem);
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .filterForm {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
