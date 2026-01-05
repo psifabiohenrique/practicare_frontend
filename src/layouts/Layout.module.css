@@ -14,9 +14,12 @@
 }
 
 .pageContent {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 1rem 1.5rem;
   max-width: 1200px;
-  width: 100%;
   margin: 0 auto;
 }
 

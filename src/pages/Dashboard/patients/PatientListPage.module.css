@@ -1,5 +1,6 @@
 .pageContainer {
   padding: var(--space-md);
+  width: 100%;
 }
 
 .title {
