@@ -1,3 +1,5 @@
+import styles from "./select-field.module.css";
+
 interface SelectFieldProps {
   label: string;
   value: string;
@@ -14,9 +16,7 @@ export default function SelectField({
   required,
 }: SelectFieldProps) {
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", marginBottom: "1rem" }}
-    >
+    <div className={styles.container}>
       <label>{label}</label>
       <select value={value} onChange={onChange} required={required}>
         <option value="">Selecione...</option>
