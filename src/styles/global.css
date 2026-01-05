@@ -1,0 +1,54 @@
+/* global.css */
+
+/* Box model consistente */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remover margens padrão */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+figure {
+  margin: 0;
+}
+
+/* Base do app */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  background-color: var(--color-bg-app);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+/* Botões e inputs */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
