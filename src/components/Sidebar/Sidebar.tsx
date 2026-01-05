@@ -40,11 +40,11 @@ const Sidebar: React.FC<SidebarProps> = ({
         className={styles.sidebarToggle}
       />
 
-      <aside className={styles.sidebarContainer}>
-        <label htmlFor="sidebarToggle" className={styles.toggleButton}>
-          <span>{">"}</span>
-        </label>
+      <label htmlFor="sidebarToggle" className={styles.toggleButton}>
+        <span>{">"}</span>
+      </label>
 
+      <aside className={styles.sidebarContainer}>
         <div className={styles.content}>
           <h3 className={styles.title}>Tratamentos do Dia</h3>
 
