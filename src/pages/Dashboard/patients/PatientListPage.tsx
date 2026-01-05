@@ -44,6 +44,16 @@ export function PatientListPage() {
     fetchPatients();
   }, []);
 
+  const handleNameOrder = () => {
+    setParams({
+      ...params,
+      order_by: "name",
+      order_dir: params.order_dir === "asc" ? "desc" : "asc",
+      skip: 0,
+    });
+    fetchPatients();
+  };
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setParams({ ...params, search: e.target.value, skip: 0 });
   };
@@ -122,7 +132,7 @@ export function PatientListPage() {
         <div>Carregando...</div>
       ) : (
         <>
-          <PatientTable data={patients} />
+          <PatientTable data={patients} onNameClick={handleNameOrder} />
           <div style={{ marginTop: "1rem", display: "flex", gap: "0.5rem" }}>
             <Button
               onClick={() =>

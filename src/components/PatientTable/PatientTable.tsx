@@ -3,15 +3,18 @@ import type { Patient } from "../../types/patient";
 
 interface PatientTableProps {
   data: Patient[];
+  onNameClick: () => void;
 }
 
-export function PatientTable({ data }: PatientTableProps) {
+export function PatientTable({ data, onNameClick }: PatientTableProps) {
   return (
     <table>
       <thead>
         <tr>
-          <th>Nome completo</th>
-          <th>Data de Nascimento</th>
+          <th>
+            <button onClick={onNameClick}>Nome completo</button>
+          </th>
+          <th>Dia de atendimento</th>
           <th>Telefone</th>
         </tr>
       </thead>
