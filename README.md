@@ -13,7 +13,8 @@ Comentário: Aqui deve ser inserida uma imagem ou GIF da Dashboard principal do 
 mostrando a visão geral dos agendamentos ou estatísticas.
 -->
 
-![Dashboard do Practicare](https://via.placeholder.com/1200x600?text=Dashboard+Practicare)
+![Login Practicare](docs/assets/TelaLogin.png)
+![Criar Paciente Practicare](docs/assets/TelaCriarPaciente.png)
 
 ---
 
@@ -111,7 +112,7 @@ Comentário: Aqui pode ser inserido um diagrama de arquitetura ou fluxo de dados
 Comentário: Imagem mostrando a tela de listagem de pacientes, destacando os filtros e a busca.
 -->
 
-![Listagem de Pacientes](https://via.placeholder.com/800x400?text=Listagem+de+Pacientes)
+![Listagem de Pacientes](docs/assets/TelaPacientes.png)
 
 ### Detalhes do Paciente
 
@@ -119,7 +120,7 @@ Comentário: Imagem mostrando a tela de listagem de pacientes, destacando os fil
 Comentário: Imagem da tela de detalhes, mostrando as informações do paciente e o histórico de tratamentos.
 -->
 
-![Detalhes do Paciente](https://via.placeholder.com/800x400?text=Detalhes+do+Paciente)
+![Detalhes do Paciente](docs/assets/TelaDetalhesPaciente.png)
 
 ---
 
@@ -129,7 +130,9 @@ Comentário: Imagem da tela de detalhes, mostrando as informações do paciente 
 Comentário: Imagem mostrando a tela de listagem de prontuários, destacando os filtros e a busca.
 -->
 
-![Listagem de Prontuários](https://via.placeholder.com/800x400?text=Listagem+de+Prontuários)
+Em desenvolvimento
+
+<!-- ![Listagem de Prontuários](https://via.placeholder.com/800x400?text=Listagem+de+Prontuários) -->
 
 ### Detalhes do Prontuário
 
@@ -137,7 +140,9 @@ Comentário: Imagem mostrando a tela de listagem de prontuários, destacando os 
 Comentário: Imagem da tela de detalhes, mostrando as informações do prontuário e o histórico de tratamentos.
 -->
 
-![Detalhes do Prontuário](https://via.placeholder.com/800x400?text=Detalhes+do+Prontuário)
+Em desenvolvimento
+
+<!-- ![Detalhes do Prontuário](https://via.placeholder.com/800x400?text=Detalhes+do+Prontuário) -->
 
 ---
 
@@ -147,7 +152,9 @@ Comentário: Imagem da tela de detalhes, mostrando as informações do prontuár
 Comentário: Imagem mostrando a tela de listagem de relatórios, destacando os filtros e a busca.
 -->
 
-![Listagem de Relatórios](https://via.placeholder.com/800x400?text=Listagem+de+Relatórios)
+Em desenvolvimento
+
+<!-- ![Listagem de Relatórios](https://via.placeholder.com/800x400?text=Listagem+de+Relatórios) -->
 
 ### Detalhes do Relatório
 
@@ -155,7 +162,9 @@ Comentário: Imagem mostrando a tela de listagem de relatórios, destacando os f
 Comentário: Imagem da tela de detalhes, mostrando as informações do relatório e o histórico de tratamentos.
 -->
 
-![Detalhes do Relatório](https://via.placeholder.com/800x400?text=Detalhes+do+Relatório)
+Em desenvolvimento
+
+<!-- ![Detalhes do Relatório](https://via.placeholder.com/800x400?text=Detalhes+do+Relatório) -->
 
 ---
 
