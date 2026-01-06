@@ -2,7 +2,7 @@
 
 O Practicare é um sistema de desenvolvido inicialmente como projeto de aprendizagem para aprimorar minhas habilidades e conhecimentos em desenvolvimento de software. Ele é composto por este projeto [**Practicare Frontend**](https://github.com/psifabiohenrique/practicare_frontend) e o [**Practicare FastAPI**](https://github.com/psifabiohenrique/practicare_fastapi).
 
-O **Practicare Frontend** é foi desenvolvido utilizando react, typescript, vite e axios. Tecnologias amplamente utilizadas no mercado de trabalho e que permitem um desenvolvimento rápido, eficiente e com qualidade.
+O **Practicare Frontend** é desenvolvido utilizando react, typescript, vite e axios. Tecnologias amplamente utilizadas no mercado de trabalho e que permitem um desenvolvimento rápido, eficiente e com qualidade.
 
 ---
 
