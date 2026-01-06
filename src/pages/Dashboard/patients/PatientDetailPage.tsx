@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getPatient } from "../../../api/patient.service";
 import type { Patient } from "../../../types/patient";
 import {
@@ -14,6 +14,7 @@ export function PatientDetailPage() {
   const { uuid } = useParams<{ uuid: string }>();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (uuid) {
@@ -29,10 +30,7 @@ export function PatientDetailPage() {
   return (
     <div>
       <h1>Detalhes do Paciente</h1>
-      <Link to="/patient">Voltar para lista</Link>
-      <Button>
-        <Link to={`/patient/${uuid}/edit`}>Editar</Link>
-      </Button>
+      <Button onClick={() => navigate(`/patient/${uuid}/edit`)}>Editar</Button>
 
       <section>
         <h3>Dados Pessoais</h3>

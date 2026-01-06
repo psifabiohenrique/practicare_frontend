@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getPatient, updatePatient } from "../../../api/patient.service";
 import { PatientForm } from "../../../components/PatientForm/PatientForm";
 import type { Patient, PatientPayload } from "../../../types/patient";
+import Button from "../../../components/Button/Button";
 
 export function PatientUpdatePage() {
   const { uuid } = useParams<{ uuid: string }>();
@@ -31,7 +32,7 @@ export function PatientUpdatePage() {
   return (
     <div>
       <h1>Editar Paciente</h1>
-      <button onClick={() => navigate(-1)}>Voltar</button>
+      <Button onClick={() => navigate(-1)}>Voltar</Button>
       <PatientForm
         initialData={patient}
         onSubmit={handleUpdate}
