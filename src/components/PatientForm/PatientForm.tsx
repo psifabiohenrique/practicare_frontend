@@ -11,6 +11,7 @@ import type {
   Gender,
   Weekdays,
 } from "../../types/patient";
+import styles from "./PatientForm.module.css";
 
 interface PatientFormProps {
   initialData?: Patient;
@@ -126,7 +127,7 @@ export function PatientForm({
   ];
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} grid={true}>
       {messages &&
         messages.map((message, index) => (
           <MessageCard key={index} message={message} />

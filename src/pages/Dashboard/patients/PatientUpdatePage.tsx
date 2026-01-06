@@ -30,7 +30,7 @@ export function PatientUpdatePage() {
   if (!patient) return <div>Paciente não encontrado.</div>;
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <h1>Editar Paciente</h1>
       <Button onClick={() => navigate(-1)}>Voltar</Button>
       <PatientForm
