@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { formatPhoneNumberIntl } from "react-phone-number-input";
 import type { Patient } from "../../types/patient";
 import { translateWeekday } from "../../utils/formatters";
 import styles from "./patient-list-card.module.css";
@@ -26,7 +27,11 @@ export function PatientListCard({ patient }: PatientListCardProps) {
         onClick={() => window.open(`https://wa.me/${patient.patient.phone}`)}
       >
         <span>📞</span>
-        <span className={styles.phone}>{patient.patient.phone}</span>
+        <span className={styles.phone}>
+          {patient.patient.phone
+            ? formatPhoneNumberIntl(patient.patient.phone)
+            : "N/A"}
+        </span>
       </div>
     </li>
   );

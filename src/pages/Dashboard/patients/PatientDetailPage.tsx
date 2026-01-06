@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { formatPhoneNumberIntl } from "react-phone-number-input";
 import { getPatient } from "../../../api/patient.service";
 import type { Patient } from "../../../types/patient";
 import {
@@ -41,7 +42,10 @@ export function PatientDetailPage() {
           <strong>E-mail:</strong> {patient.patient.email}
         </p>
         <p>
-          <strong>Telefone:</strong> {patient.patient.phone}
+          <strong>Telefone:</strong>{" "}
+          {patient.patient.phone
+            ? formatPhoneNumberIntl(patient.patient.phone)
+            : "N/A"}
         </p>
         <p>
           <strong>Data de Nascimento:</strong>{" "}

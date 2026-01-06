@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Form from "../Form/Form";
 import TextField from "../TextField/TextField";
+import PhoneInput from "../PhoneInput/PhoneInput";
 import SelectField from "../SelectField/SelectField";
 import Button from "../Button/Button";
 import { MessageCard } from "../MessageCard/MessageCard";
@@ -11,7 +12,6 @@ import type {
   Gender,
   Weekdays,
 } from "../../types/patient";
-import styles from "./PatientForm.module.css";
 
 interface PatientFormProps {
   initialData?: Patient;
@@ -156,12 +156,11 @@ export function PatientForm({
         onChange={(e) => setEmail(e.target.value)}
         required
       />
-      <TextField
+      <PhoneInput
         label="Telefone"
         placeholder="Telefone"
         value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        required
+        onChange={(value) => setPhone(value || "")}
       />
       <TextField
         label="Data de Nascimento"
