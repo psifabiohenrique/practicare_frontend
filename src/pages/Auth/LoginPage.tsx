@@ -5,6 +5,7 @@ import Button from "../../components/Button/Button";
 import Form from "../../components/Form/Form";
 import { Link, useNavigate } from "react-router-dom";
 import { MessageCard } from "../../components/MessageCard/MessageCard";
+import styles from "./LoginCreatePage.module.css";
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -29,7 +30,7 @@ export function LoginPage() {
   }
 
   return (
-    <>
+    <div className={styles.loginContainer}>
       <h1>Login</h1>
       {message && (
         <MessageCard title={message.title} message={message.message} />
@@ -55,6 +56,6 @@ export function LoginPage() {
       <p>
         Não tem uma conta? <Link to="/register">Cadastre-se</Link>
       </p>
-    </>
+    </div>
   );
 }
