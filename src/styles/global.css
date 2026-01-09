@@ -25,7 +25,9 @@ body,
 #root {
   height: 100%;
 }
-
+:root {
+  background-color: var(--color-bg-app);
+}
 body {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
