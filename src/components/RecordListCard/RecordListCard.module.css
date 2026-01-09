@@ -1,0 +1,15 @@
+.recordListCardContainer {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm);
+}
+
+.recordListCardContainer span {
+  display: block;
+}
+
+.recordListCardContainer:hover {
+  cursor: pointer;
+  background-color: var(--color-bg-surface);
+  transform: translateY(var(--translate-md));
+}

@@ -25,7 +25,7 @@ export function PatientDetailPage() {
   return (
     <div className={styles.patientDetailPage}>
       <PatientDetailCard patient={patient} uuid={uuid!} />
-      <RecordList />
+      <RecordList treatmentId={uuid!} />
     </div>
   );
 }
