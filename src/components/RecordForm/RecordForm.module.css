@@ -1,0 +1,15 @@
+.row {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-md);
+}
+
+.loading {
+  padding: var(--space-md);
+  text-align: center;
+}
