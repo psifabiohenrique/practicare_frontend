@@ -10,7 +10,7 @@ export default function Form({ children, onSubmit, grid }: FormProps) {
   return (
     <form
       onSubmit={onSubmit}
-      className={styles.form + " " + grid ? styles.grid : ""}
+      className={`${styles.form} ${grid ? styles.grid : ""}`}
     >
       {children}
     </form>

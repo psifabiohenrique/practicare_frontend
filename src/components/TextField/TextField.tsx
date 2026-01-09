@@ -7,6 +7,7 @@ interface TextFieldProps {
   value?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
+  name?: string;
 }
 
 export default function TextField({
@@ -16,11 +17,13 @@ export default function TextField({
   value,
   onChange,
   required,
+  name,
 }: TextFieldProps) {
   return (
     <div className={styles.container}>
       <label>{label}</label>
       <input
+        name={name}
         type={type}
         value={value}
         onChange={onChange}
