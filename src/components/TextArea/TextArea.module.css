@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+label {
+  font-size: 14px;
+  color: var(--color-text-primary);
+}
+
+textarea {
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.2s ease;
+  background-color: transparent;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  resize: vertical;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+textarea::placeholder {
+  color: var(--color-text-secondary);
+}
