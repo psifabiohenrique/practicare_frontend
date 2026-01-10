@@ -5,6 +5,7 @@ import TextField from "../TextField/TextField";
 import Button from "../Button/Button";
 import { MessageCard } from "../MessageCard/MessageCard";
 import { validateRegister } from "./registerValidation";
+import { useNavigate } from "react-router-dom";
 
 export function RegisterForm() {
   const [name, setName] = useState("");
@@ -12,6 +13,8 @@ export function RegisterForm() {
   const [password, setPassword] = useState("");
   const [password_confirmation, setPasswordConfirmation] = useState("");
   const [messages, setMessages] = useState<string[] | null>(null);
+
+  const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -33,6 +36,9 @@ export function RegisterForm() {
         password_confirmation,
       });
       setMessages(["Usuário cadastrado com sucesso!"]);
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
       setMessages(["Erro ao cadastrar usuário"]);
     }
