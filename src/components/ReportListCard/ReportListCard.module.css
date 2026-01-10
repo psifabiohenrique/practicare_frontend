@@ -1,0 +1,56 @@
+.reportListCardContainer {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-bg-surface);
+  transition: transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.reportListCardContainer:hover {
+  transform: translateY(var(--translate-sm));
+  box-shadow: var(--shadow-md);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.reportTitle {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.date,
+.period {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.viewButton {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+}
+
+.viewButton:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.editButton {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+}

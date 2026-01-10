@@ -1,33 +1,33 @@
-import { type Record } from "../../types/record";
+import { type Report } from "../../types/report";
 import { formatDate } from "../../utils/formatters";
 import type { ModalType } from "../../pages/Dashboard/patients/PatientDetailPage";
 import Button from "../Button/Button";
-import styles from "./RecordListCard.module.css";
+import styles from "./ReportListCard.module.css";
 
-interface RecordListCardProps {
-  record: Record;
+interface ReportListCardProps {
+  report: Report;
   onOpenModal: (type: ModalType, uuid?: string) => void;
 }
 
-export function RecordListCard({ record, onOpenModal }: RecordListCardProps) {
+export function ReportListCard({ report, onOpenModal }: ReportListCardProps) {
   return (
-    <div className={styles.recordListCardContainer}>
+    <div className={styles.reportListCardContainer}>
       <div className={styles.info}>
-        <span className={styles.recordNumber}>
-          Registro Nº {record.record_number}
+        <span className={styles.reportTitle}>Relatório</span>
+        <span className={styles.date}>
+          Emissão: {formatDate(report.issue_date)}
         </span>
-        <span className={styles.date}>{formatDate(record.date)}</span>
       </div>
       <div className={styles.actions}>
         <Button
           className={styles.viewButton}
-          onClick={() => onOpenModal("record_detail", record.uuid)}
+          onClick={() => onOpenModal("report_detail", report.uuid)}
         >
           Visualizar
         </Button>
         <Button
           className={styles.editButton}
-          onClick={() => onOpenModal("record_form", record.uuid)}
+          onClick={() => onOpenModal("report_form", report.uuid)}
         >
           Editar
         </Button>
