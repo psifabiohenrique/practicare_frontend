@@ -1,7 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { getPatient } from "../../../api/patient.service";
-import type { Patient } from "../../../types/patient";
 import { PatientDetailCard } from "../../../components/PatientDetailCard/PatientDetailCard";
 import { RecordList } from "../../../components/RecordList/RecordList";
 import { Modal } from "../../../components/Modal/Modal";
@@ -11,12 +9,14 @@ import { ReportList } from "../../../components/ReportList/ReportList";
 import { ReportForm } from "../../../components/ReportForm/ReportForm";
 import { ReportDetail } from "../../../components/ReportDetail/ReportDetail";
 import styles from "./PatientDetailPage.module.css";
+import { PatientForm } from "../../../components/PatientForm/PatientForm";
 
 export type ModalType =
   | "record_detail"
   | "record_form"
   | "report_detail"
   | "report_form"
+  | "patient_form"
   | "referral"; // Expandable
 
 interface ModalState {
@@ -27,10 +27,9 @@ interface ModalState {
 
 export function PatientDetailPage() {
   const { uuid } = useParams<{ uuid: string }>();
-  const [patient, setPatient] = useState<Patient | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [refreshRecordsKey, setRefreshRecordsKey] = useState(0);
   const [refreshReportsKey, setRefreshReportsKey] = useState(0);
+  const [refreshPatientKey, setRefreshPatientKey] = useState(0);
 
   const [modalState, setModalState] = useState<ModalState>({
     type: null,
@@ -57,16 +56,10 @@ export function PatientDetailPage() {
     handleCloseModal();
   }, [handleCloseModal]);
 
-  useEffect(() => {
-    if (uuid) {
-      getPatient(uuid)
-        .then(setPatient)
-        .finally(() => setIsLoading(false));
-    }
-  }, [uuid]);
-
-  if (isLoading) return <div>Carregando...</div>;
-  if (!patient) return <div>Paciente não encontrado.</div>;
+  const handlePatientSuccess = useCallback(() => {
+    setRefreshPatientKey((prev) => prev + 1);
+    handleCloseModal();
+  }, [handleCloseModal]);
 
   const renderModalContent = () => {
     switch (modalState.type) {
@@ -90,6 +83,8 @@ export function PatientDetailPage() {
             onSuccess={handleReportSuccess}
           />
         );
+      case "patient_form":
+        return <PatientForm uuid={uuid} onSuccess={handlePatientSuccess} />;
       default:
         return null;
     }
@@ -113,7 +108,11 @@ export function PatientDetailPage() {
 
   return (
     <div className={styles.patientDetailPage}>
-      <PatientDetailCard patient={patient} uuid={uuid!} />
+      <PatientDetailCard
+        uuid={uuid!}
+        onOpenModal={handleOpenModal}
+        refreshKey={refreshPatientKey}
+      />
       <RecordList
         treatmentId={uuid!}
         onOpenModal={handleOpenModal}

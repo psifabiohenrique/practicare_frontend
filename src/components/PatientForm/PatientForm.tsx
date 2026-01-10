@@ -6,62 +6,55 @@ import SelectField from "../SelectField/SelectField";
 import Button from "../Button/Button";
 import { MessageCard } from "../MessageCard/MessageCard";
 import { validatePatient } from "./patientValidation";
-import type {
-  Patient,
-  PatientPayload,
-  Gender,
-  Weekdays,
-} from "../../types/patient";
+import type { PatientPayload, Gender, Weekdays } from "../../types/patient";
+import {
+  createPatient,
+  getPatient,
+  updatePatient,
+} from "../../api/patient.service";
 
 interface PatientFormProps {
-  initialData?: Patient;
-  onSubmit: (payload: PatientPayload) => Promise<any>;
-  submitButtonText?: string;
-  successMessage?: string;
+  uuid?: string;
+  onSuccess?: () => void;
 }
 
-export function PatientForm({
-  initialData,
-  onSubmit,
-  submitButtonText = "Salvar",
-  successMessage = "Operação realizada com sucesso!",
-}: PatientFormProps) {
-  const [firstName, setFirstName] = useState(
-    initialData?.patient.first_name || ""
-  );
-  const [lastName, setLastName] = useState(
-    initialData?.patient.last_name || ""
-  );
-  const [email, setEmail] = useState(initialData?.patient.email || "");
-  const [phone, setPhone] = useState(initialData?.patient.phone || "");
-  const [birthDate, setBirthDate] = useState(
-    initialData?.patient.birth_date || ""
-  );
-  const [gender, setGender] = useState<Gender>(
-    initialData?.patient.gender || "Other"
-  );
+export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [gender, setGender] = useState<Gender>("Other");
+  const [weekday, setWeekday] = useState<Weekdays>("Monday");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [userUUID, setUserUUID] = useState<string>("");
 
-  const [weekday, setWeekday] = useState<Weekdays>(
-    initialData?.weekday || "Monday"
-  );
-  const [startTime, setStartTime] = useState(initialData?.start_time || "");
-  const [endTime, setEndTime] = useState(initialData?.end_time || "");
+  const [submitButtonText, setSubmitButtonText] = useState<string>("Salvar");
 
   const [messages, setMessages] = useState<string[] | null>(null);
 
+  const successMessage = "Operação realizada com sucesso!";
+
+  async function fetchPatientInitialData(uuid: string) {
+    const patient = await getPatient(uuid);
+    setFirstName(patient.patient.first_name);
+    setLastName(patient.patient.last_name);
+    setEmail(patient.patient.email);
+    setPhone(patient.patient.phone);
+    setBirthDate(patient.patient.birth_date);
+    setGender(patient.patient.gender);
+    setWeekday(patient.weekday);
+    setStartTime(patient.start_time);
+    setEndTime(patient.end_time);
+    setUserUUID(patient.user_uuid);
+  }
   useEffect(() => {
-    if (initialData) {
-      setFirstName(initialData.patient.first_name);
-      setLastName(initialData.patient.last_name);
-      setEmail(initialData.patient.email);
-      setPhone(initialData.patient.phone);
-      setBirthDate(initialData.patient.birth_date);
-      setGender(initialData.patient.gender);
-      setWeekday(initialData.weekday);
-      setStartTime(initialData.start_time);
-      setEndTime(initialData.end_time);
+    if (uuid) {
+      fetchPatientInitialData(uuid);
+      setSubmitButtonText("Atualizar");
     }
-  }, [initialData]);
+  }, [uuid]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -76,8 +69,8 @@ export function PatientForm({
         gender,
       },
       treatment_schema: {
-        user_uuid: initialData?.user_uuid || "",
-        patient_uuid: initialData?.patient_uuid || "",
+        user_uuid: userUUID || "",
+        patient_uuid: uuid || "",
         weekday: weekday,
         start_time: startTime,
         end_time: endTime,
@@ -91,9 +84,12 @@ export function PatientForm({
     }
 
     try {
-      await onSubmit(payload);
-      setMessages([successMessage]);
-      if (!initialData) {
+      if (uuid) {
+        await updatePatient(uuid, payload);
+      } else {
+        await createPatient(payload);
+      }
+      if (!uuid) {
         // Clear form only on create
         setFirstName("");
         setLastName("");
@@ -105,7 +101,12 @@ export function PatientForm({
         setStartTime("");
         setEndTime("");
       }
+      setMessages([successMessage]);
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error) {
+      console.log(error);
       setMessages(["Erro ao processar a solicitação"]);
     }
   }
