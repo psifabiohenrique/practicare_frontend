@@ -19,8 +19,13 @@ export function PatientDetailCard({ patient, uuid }: PatientDetailCardProps) {
   const navigate = useNavigate();
 
   function handlePhoneClick() {
-    navigate(`https://wa.me/${patient.patient.phone}`);
+    window.open(`https://wa.me/${patient.patient.phone}`, "_blank");
   }
+
+  function handleEmailClick() {
+    window.open(`mailto:${patient.patient.email}`, "_blank");
+  }
+
   return (
     <div className={styles.patientDetailCard}>
       <h1>Detalhes do Paciente</h1>
@@ -31,10 +36,10 @@ export function PatientDetailCard({ patient, uuid }: PatientDetailCardProps) {
         <p>
           <strong>Nome:</strong> {patient.patient.full_name}
         </p>
-        <p>
+        <p className={styles.email} onClick={handleEmailClick}>
           <strong>E-mail:</strong> {patient.patient.email}
         </p>
-        <p onClick={handlePhoneClick}>
+        <p onClick={handlePhoneClick} className={styles.phone}>
           <strong>Telefone:</strong>{" "}
           {patient.patient.phone
             ? formatPhoneNumberIntl(patient.patient.phone)

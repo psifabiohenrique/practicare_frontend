@@ -41,7 +41,9 @@ export function RecordDetail({ recordUuid }: RecordDetailProps) {
         <span className={styles.recordNumber}>
           Registro nº {record.record_number}
         </span>
-        <span className={styles.date}>{formatDate(record.date)}</span>
+        <span className={styles.date}>
+          Prontuário do dia: {formatDate(record.date)}
+        </span>
       </div>
 
       <div className={styles.timeRange}>
