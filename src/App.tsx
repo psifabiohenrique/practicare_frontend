@@ -7,7 +7,7 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AudioRecorder onFinalize={() => console.log("finalizado")} />
+        <AudioRecorder />
         <AppRoutes />
       </AuthProvider>
     </BrowserRouter>
