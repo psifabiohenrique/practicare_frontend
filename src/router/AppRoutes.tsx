@@ -8,7 +8,6 @@ import { UpdateUserPage } from "../pages/Dashboard/user/UpdateUserPage";
 import { PatientListPage } from "../pages/Dashboard/patients/PatientListPage";
 import { PatientCreatePage } from "../pages/Dashboard/patients/PatientCreatePage";
 import { PatientDetailPage } from "../pages/Dashboard/patients/PatientDetailPage";
-import { PatientUpdatePage } from "../pages/Dashboard/patients/PatientUpdatePage";
 import { SessionSchedulePage } from "../pages/Dashboard/schedule/SessionSchedulePage";
 
 export function AppRoutes() {
@@ -62,16 +61,6 @@ export function AppRoutes() {
           <PrivateRoute>
             <MainLayout>
               <PatientDetailPage />
-            </MainLayout>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/patient/:uuid/edit"
-        element={
-          <PrivateRoute>
-            <MainLayout>
-              <PatientUpdatePage />
             </MainLayout>
           </PrivateRoute>
         }
