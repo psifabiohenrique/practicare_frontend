@@ -32,11 +32,15 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
   const [patient, setPatientState] = useState<Patient | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
+  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string>("");
+  const [captureTabAudio, setCaptureTabAudio] = useState<boolean>(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const displayStreamRef = useRef<MediaStream | null>(null);
   const timeRef = useRef<number | null>(null);
-  const statusRef = useRef<StatusType>(Status.idle); // Novo ref para status síncrono
-  const pendingFinalizeRef = useRef(false); // Flag para finalização pendente
+  const statusRef = useRef<StatusType>(Status.idle);
+  const pendingFinalizeRef = useRef(false);
 
   const setPatient = (p: Patient) => {
     setPatientState(p);
@@ -59,17 +63,69 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
   const mimeType = preferredMimeTypes.find((type) =>
     MediaRecorder.isTypeSupported(type),
   );
+
+  useEffect(() => {
+    const getDevices = async () => {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const audioInputs = devices.filter(
+          (device) => device.kind === "audioinput",
+        );
+        setDevices(audioInputs);
+        if (audioInputs.length > 0 && !selectedDeviceId) {
+          setSelectedDeviceId(audioInputs[0].deviceId);
+        }
+      } catch (error) {
+        console.error("Error enumerating devices:", error);
+      }
+    };
+    getDevices();
+  }, [selectedDeviceId]);
+
   const startRecording = async () => {
     try {
-
       if (!mimeType) {
-        alert("Este navegador não suporta o formato de áudio adequado, por favor utilize outro.")
+        alert(
+          "Este navegador não suporta o formato de áudio adequado, por favor utilize outro.",
+        );
         throw new Error("Nenhum mimeType de áudio suportado neste browser");
       }
 
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const constraints: MediaStreamConstraints = {
+        audio: selectedDeviceId
+          ? { deviceId: { exact: selectedDeviceId } }
+          : true,
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
-      const mediaRecorder = new MediaRecorder(stream, {mimeType});
+
+      let finalStream = stream;
+
+      if (captureTabAudio) {
+        try {
+          const displayStream = await navigator.mediaDevices.getDisplayMedia({
+            video: true,
+            audio: true,
+          });
+          displayStreamRef.current = displayStream;
+
+          const audioContext = new AudioContext();
+          const micSource = audioContext.createMediaStreamSource(stream);
+          const tabSource = audioContext.createMediaStreamSource(displayStream);
+          const destination = audioContext.createMediaStreamDestination();
+
+          micSource.connect(destination);
+          tabSource.connect(destination);
+
+          finalStream = destination.stream;
+        } catch (err) {
+          console.error("Error capturing tab audio:", err);
+          // Fallback to just mic if user cancels tab selection OR browser doesn't support it
+        }
+      }
+
+      const mediaRecorder = new MediaRecorder(finalStream, { mimeType });
       mediaRecorderRef.current = mediaRecorder;
       const chunks: Blob[] = [];
       mediaRecorder.ondataavailable = (event) => {
@@ -79,8 +135,8 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
       };
       mediaRecorder.onstop = () => {
         setAudioChunks(chunks);
-        
-        releaseMicrophone()
+
+        releaseMicrophone();
         if (pendingFinalizeRef.current) {
           pendingFinalizeRef.current = false;
           finalizeSubmitRecordingWithChunks(chunks);
@@ -89,10 +145,10 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
       mediaRecorder.start();
       setStatus(Status.recording);
       statusRef.current = Status.recording;
-      const startTime = Date.now();
+
       timeRef.current = setInterval(() => {
         if (statusRef.current === Status.recording) {
-          setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+          setElapsedTime((prev) => prev + 1);
         }
       }, 1000);
     } catch (error) {
@@ -119,7 +175,7 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
   const hide = () => {
     setStatus(Status.idle);
     statusRef.current = Status.idle;
-    releaseMicrophone()
+    releaseMicrophone();
   };
 
   const stopRecording = () => {
@@ -142,7 +198,7 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
     }
-    releaseMicrophone()
+    releaseMicrophone();
     setStatus(Status.inactive);
     statusRef.current = Status.inactive;
     setAudioChunks([]);
@@ -180,11 +236,15 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const releaseMicrophone = () => {
-  if (streamRef.current) {
-    streamRef.current.getTracks().forEach((track) => track.stop());
-    streamRef.current = null;
-  }
-};
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+    if (displayStreamRef.current) {
+      displayStreamRef.current.getTracks().forEach((track) => track.stop());
+      displayStreamRef.current = null;
+    }
+  };
 
   useEffect(() => {
     statusRef.current = status;
@@ -199,8 +259,13 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
     streamRef: streamRef.current,
     timeRef: timeRef.current ? Number(timeRef.current) : null,
     pendingFinalizeRef,
+    devices,
+    selectedDeviceId,
+    captureTabAudio,
     setPatient,
     clearPatient,
+    setSelectedDeviceId,
+    setCaptureTabAudio,
     startRecording,
     resumeRecording,
     pauseRecording,

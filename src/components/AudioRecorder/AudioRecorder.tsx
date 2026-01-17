@@ -16,6 +16,11 @@ export default function AudioRecorder() {
     cancelRecording,
     stopRecording,
     hide,
+    devices,
+    selectedDeviceId,
+    captureTabAudio,
+    setSelectedDeviceId,
+    setCaptureTabAudio,
   } = recording;
 
   const handleStartRecording = async () => {
@@ -49,7 +54,7 @@ export default function AudioRecorder() {
       window.confirm("Tem certeza que deseja finalizar e enviar a gravação?")
     ) {
       pendingFinalizeRef.current = true;
-      stopRecording()
+      stopRecording();
     }
   };
 
@@ -63,21 +68,58 @@ export default function AudioRecorder() {
     >
       <h4>Registro de sessão</h4>
       <div className={styles.infoContainer}>
-        <p>Paciente: <span>{patient?.patient.first_name}</span></p>
         <p>
-          Status do registro:{" "}<span>
-          {status === "inactive"
-            ? "Não iniciado"
-            : status === "recording"
-              ? "Gravando"
-              : status === "paused"
-                ? "Pausado"
-                : "Idle"}</span>
+          Paciente: <span>{patient?.patient.first_name}</span>
         </p>
         <p>
-          Tempo: <span>{Math.floor(Number(elapsedTime) / 60)}:
-          {(Number(elapsedTime) % 60).toString().padStart(2, "0")}</span>
+          Status do registro:{" "}
+          <span>
+            {status === "inactive"
+              ? "Não iniciado"
+              : status === "recording"
+                ? "Gravando"
+                : status === "paused"
+                  ? "Pausado"
+                  : "Idle"}
+          </span>
         </p>
+        <p>
+          Tempo:{" "}
+          <span>
+            {Math.floor(Number(elapsedTime) / 60)}:
+            {(Number(elapsedTime) % 60).toString().padStart(2, "0")}
+          </span>
+        </p>
+      </div>
+
+      <div className={styles.configContainer}>
+        <div className={styles.configItem}>
+          <label htmlFor="device-select">Microfone:</label>
+          <select
+            id="device-select"
+            value={selectedDeviceId}
+            onChange={(e) => setSelectedDeviceId(e.target.value)}
+            disabled={status !== Status.inactive}
+            className={styles.select}
+          >
+            {devices.map((device) => (
+              <option key={device.deviceId} value={device.deviceId}>
+                {device.label || `Microfone ${device.deviceId.slice(0, 5)}`}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className={styles.configItem}>
+          <label className={styles.checkboxLabel}>
+            <input
+              type="checkbox"
+              checked={captureTabAudio}
+              onChange={(e) => setCaptureTabAudio(e.target.checked)}
+              disabled={status !== Status.inactive}
+            />
+            Capturar áudio do navegador
+          </label>
+        </div>
       </div>
       <div className={styles.buttonsContainer}>
         <Button
