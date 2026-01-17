@@ -10,14 +10,18 @@ export function validatePatient(data: PatientPayload) {
   if (!data.patient_schema.last_name) {
     errors.last_name = "O sobrenome é obrigatório.";
   }
-  if (!data.patient_schema.email) {
-    errors.email = "O e-mail é obrigatório.";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.patient_schema.email)) {
+  // if (!data.patient_schema.email) {
+  //   errors.email = "O e-mail é obrigatório.";
+  // } else
+  if (
+    data.patient_schema.email &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.patient_schema.email)
+  ) {
     errors.email = "E-mail inválido.";
   }
-  if (!data.patient_schema.phone) {
-    errors.phone = "O telefone é obrigatório.";
-  }
+  // if (!data.patient_schema.phone) {
+  //   errors.phone = "O telefone é obrigatório.";
+  // }
   if (!data.patient_schema.birth_date) {
     errors.birth_date = "A data de nascimento é obrigatória.";
   }

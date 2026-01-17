@@ -155,7 +155,6 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        required
       />
       <PhoneInput
         label="Telefone"
@@ -168,7 +167,6 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
         type="date"
         value={birthDate}
         onChange={(e) => setBirthDate(e.target.value)}
-        required
       />
       <SelectField
         label="Gênero"
