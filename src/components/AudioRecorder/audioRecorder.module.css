@@ -42,5 +42,11 @@
   justify-content: space-around;
 }
 .infoContainer p {
-  display: inline-block;
+    padding: 5px;
+}
+.infoContainer span {
+    font-weight: bold;
+}
+.hidden {
+  display: none;
 }

@@ -11,6 +11,7 @@ import styles from "./PatientDetailCard.module.css";
 import type { ModalType } from "../../pages/Dashboard/patients/PatientDetailPage";
 import { useEffect, useState } from "react";
 import { getPatient } from "../../api/patient.service";
+import { useRecording } from "../AudioRecorder/AudioRecorderContext";
 
 interface PatientDetailCardProps {
   uuid: string;
@@ -25,6 +26,7 @@ export function PatientDetailCard({
 }: PatientDetailCardProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [patient, setPatient] = useState<Patient | null>(null);
+  const recording = useRecording();
 
   useEffect(() => {
     if (uuid) {
@@ -42,6 +44,12 @@ export function PatientDetailCard({
     window.open(`mailto:${patient?.patient.email}`, "_blank");
   }
 
+  function handleStartRecording() {
+    if (patient) {
+      recording.setPatient(patient);
+    }
+  }
+
   return isLoading ? (
     <div>Carregando...</div>
   ) : (
@@ -51,6 +59,9 @@ export function PatientDetailCard({
         onClick={() => onOpenModal("patient_form", uuid, "Editar Paciente")}
       >
         Editar
+      </Button>
+      <Button onClick={handleStartRecording}>
+        Iniciar Registro
       </Button>
 
       <section>

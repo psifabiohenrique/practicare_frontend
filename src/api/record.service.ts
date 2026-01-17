@@ -8,11 +8,11 @@ import type {
 
 export async function listRecords(
   treatment_uuid: string,
-  params?: RecordListParams
+  params?: RecordListParams,
 ): Promise<Record[]> {
   const response = await api.get(
     `/treatment-records/treatment/${treatment_uuid}/`,
-    { params }
+    { params },
   );
   return response.data;
 }
@@ -29,11 +29,26 @@ export async function createRecord(payload: RecordPayload): Promise<Record> {
 
 export async function updateRecord(
   record_uuid: string,
-  payload: RecordUpdatePayload
+  payload: RecordUpdatePayload,
 ): Promise<Record> {
   const response = await api.patch(
     `/treatment-records/${record_uuid}/`,
-    payload
+    payload,
   );
   return response.data;
+}
+
+export async function submitAutomatedRecord(
+  treatment_uuid: string,
+  formData: FormData,
+): Promise<void> {
+  await api.post(
+    `/treatment-records/treatments/${treatment_uuid}/automated-record`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
+  );
 }

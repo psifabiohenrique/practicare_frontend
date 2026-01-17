@@ -1,4 +1,6 @@
+import type { RefObject } from "react";
 import type { Patient } from "./patient";
+
 
 export const Status = {
   idle: "idle",
@@ -18,6 +20,7 @@ export interface RecordingContextData {
   mediaRecorderRef: MediaRecorder | null
   streamRef: MediaStream | null
   timeRef: Number | null;
+  pendingFinalizeRef: RefObject<boolean>;
 
 
   setPatient: (patient: Patient) => void;
@@ -25,7 +28,9 @@ export interface RecordingContextData {
 
   startRecording: () => void;
   resumeRecording: () => void;
+  pauseRecording: () => void;
   stopRecording: () => void;
   cancelRecording: () => void;
-  finalizeSubmitRecording: (onFinalize: (audioBlob: Blob) => void) => void
+  finalizeSubmitRecordingWithChunks: (chunks: Blob[]) => void;
+  hide: () => void;
 }
