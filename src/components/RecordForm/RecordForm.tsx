@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import {
   createRecord,
   getRecord,
+  reuploadAutomatedRecord,
   updateRecord,
 } from "../../api/record.service";
 import Form from "../Form/Form";
@@ -32,6 +33,10 @@ export function RecordForm({
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [messages, setMessages] = useState<string[] | null>(null);
+
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const isUpdate = !!recordUuid;
 
@@ -71,6 +76,33 @@ export function RecordForm({
     }
   }, [recordUuid]);
 
+  const handleReuploadAudio = async () => {
+    try {
+      if (file && recordUuid) {
+        const formData = new FormData();
+        formData.append("audio_file", file);
+        await reuploadAutomatedRecord(recordUuid, formData);
+        setMessages([
+          "Áudio enviado com sucesso, aguarde que ele será reprocessado",
+        ]);
+        setContent("O áudio será reprocessado em background!");
+      }
+    } catch {
+      setMessages(["Falha ao enviar o áudio, tente novamente em breve."]);
+    }
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const _file = event.target.files?.[0];
+    if (_file) {
+      setFile(_file);
+      setFileName(_file.name);
+    }
+  };
+
+  const handleOpenFileSistem = () => {
+    fileInputRef.current?.click();
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessages(null);
@@ -115,14 +147,16 @@ export function RecordForm({
           <MessageCard key={index} message={message} />
         ))}
 
-      <TextField
-        label="Data"
-        type="date"
-        name="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-        required
-      />
+      <div className={styles.row}>
+        <TextField
+          label="Data"
+          type="date"
+          name="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
+        />
+      </div>
 
       <div className={styles.row}>
         <TextField
@@ -154,9 +188,35 @@ export function RecordForm({
       />
 
       <div className={styles.actions}>
+        {isUpdate && (
+          <div className={styles.reSendButton}>
+            <label>Escolha um arquivo de áudio a ser reenviado</label>
+            <Button
+              type="button"
+              onClick={handleOpenFileSistem}
+              disabled={isLoading}
+            >
+              Escolher arquivo
+            </Button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              style={{ display: "none" }} // Oculta o input nativo
+            />
+          </div>
+        )}
         <Button type="submit" disabled={isLoading}>
           {isLoading ? "Salvando..." : isUpdate ? "Atualizar" : "Salvar"}
         </Button>
+      </div>
+      <div className={styles.actions}>
+        {fileName && <p>Arquivo selecionado: {fileName}</p>}
+        {fileName && (
+          <button type="button" onClick={handleReuploadAudio}>
+            Enviar
+          </button>
+        )}
       </div>
     </Form>
   );

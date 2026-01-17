@@ -52,3 +52,18 @@ export async function submitAutomatedRecord(
     },
   );
 }
+
+export async function reuploadAutomatedRecord(
+  record_uuid: string,
+  formData: FormData,
+): Promise<void> {
+  await api.post(
+    `/treatment-records/treatments/${record_uuid}/automated-record-reload`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
+  );
+}
