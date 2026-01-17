@@ -4,15 +4,16 @@ import type {
   ReportPayload,
   ReportUpdatePayload,
   ReportListParams,
+  ReportWithAiPayload,
 } from "../types/report";
 
 export async function listReports(
   treatment_uuid: string,
-  params: ReportListParams
+  params: ReportListParams,
 ) {
   const response = await api.get<Report[]>(
     `/treatment-reports/treatment/${treatment_uuid}/`,
-    { params }
+    { params },
   );
   return response.data;
 }
@@ -29,11 +30,22 @@ export async function createReport(payload: ReportPayload): Promise<Report> {
 
 export async function updateReport(
   report_uuid: string,
-  payload: ReportUpdatePayload
+  payload: ReportUpdatePayload,
 ): Promise<Report> {
   const response = await api.patch(
     `/treatment-reports/${report_uuid}/`,
-    payload
+    payload,
+  );
+  return response.data;
+}
+
+export async function createReportWithAi(
+  treatment_uuid: string,
+  payload: ReportWithAiPayload,
+): Promise<Report> {
+  const response = await api.post(
+    `/treatment-reports/treatments/${treatment_uuid}/automated-report`,
+    payload,
   );
   return response.data;
 }

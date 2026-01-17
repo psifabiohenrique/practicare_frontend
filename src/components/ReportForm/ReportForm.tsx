@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   createReport,
+  createReportWithAi,
   getReport,
   updateReport,
 } from "../../api/report.service";
@@ -9,7 +10,11 @@ import TextField from "../TextField/TextField";
 import { TextArea } from "../TextArea/TextArea";
 import Button from "../Button/Button";
 import { MessageCard } from "../MessageCard/MessageCard";
-import type { ReportPayload, ReportUpdatePayload } from "../../types/report";
+import type {
+  ReportPayload,
+  ReportUpdatePayload,
+  ReportWithAiPayload,
+} from "../../types/report";
 import styles from "./ReportForm.module.css";
 
 interface ReportFormProps {
@@ -28,7 +33,7 @@ export function ReportForm({
   const [analysis, setAnalysis] = useState("");
   const [conclusion, setConclusion] = useState("");
   const [issueDate, setIssueDate] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [startDatePeriod, setStartDatePeriod] = useState("");
   const [endDatePeriod, setEndDatePeriod] = useState("");
@@ -62,6 +67,37 @@ export function ReportForm({
       fetchReport();
     }
   }, [reportUuid]);
+
+  const handleAiSubmit = async () => {
+    if (treatmentUuid) {
+      if (
+        confirm(
+          "Você confirma a geração de um novo relatório para o período descrito?",
+        )
+      ) {
+        try {
+          const payload: ReportWithAiPayload = {
+            treatment_uuid: treatmentUuid!,
+            issue_date: issueDate,
+            start_date_period: startDatePeriod,
+            end_date_period: endDatePeriod,
+          };
+          const result = await createReportWithAi(treatmentUuid, payload);
+          setMessages([
+            "Solicitação enviado com sucesso, aguarde o processamento",
+          ]);
+          setDemandDescription(result.demand_description);
+          setProcedures(result.procedures);
+          setAnalysis(result.analysis);
+          setConclusion(result.conclusion);
+        } catch {
+          setMessages([
+            "Falha ao realizar solicitação, verifique as datas inseridas ou tente novamente mais tarde.",
+          ]);
+        }
+      }
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -182,6 +218,11 @@ export function ReportForm({
       />
 
       <div className={styles.actions}>
+        {!isUpdate && (
+          <Button type="button" disabled={isLoading} onClick={handleAiSubmit}>
+            Gerar relatório com IA
+          </Button>
+        )}
         <Button type="submit" disabled={isLoading}>
           {isLoading ? "Salvando..." : isUpdate ? "Atualizar" : "Salvar"}
         </Button>

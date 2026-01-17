@@ -24,6 +24,11 @@ export type ReportPayload = Pick<
   | "end_date_period"
 >;
 
+export type ReportWithAiPayload = Pick<
+  Report,
+  "treatment_uuid" | "issue_date" | "start_date_period" | "end_date_period"
+>;
+
 export type ReportUpdatePayload = Partial<
   Omit<ReportPayload, "treatment_uuid" | "created_at" | "updated_at">
 >;
