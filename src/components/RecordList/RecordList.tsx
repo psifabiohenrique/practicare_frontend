@@ -33,11 +33,16 @@ export function RecordList({
     <div className={styles.recordContainer}>
       <header className={styles.header}>
         <h1>Prontuários</h1>
-        <Button onClick={() => onOpenModal("record_form")}>
-          Adicionar Registro
-        </Button>
       </header>
 
+      <div className={styles.button}>
+      <Button
+        onClick={() => onOpenModal("record_form")}
+        style={{ width: "200px" }}
+      >
+        Adicionar Registro
+      </Button>
+      </div>
       <div className={styles.recordsGrid}>
         {records && records.length > 0 ? (
           records.map((record) => (

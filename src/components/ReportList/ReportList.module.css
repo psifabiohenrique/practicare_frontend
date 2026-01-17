@@ -11,7 +11,7 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
@@ -19,6 +19,11 @@
   margin: 0;
   font-size: var(--font-size-lg);
   color: var(--color-text-primary);
+}
+
+.button {
+  display: flex;
+  justify-content: center;
 }
 
 .reportsGrid {
@@ -29,6 +34,6 @@
 
 .pagination {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-top: var(--space-md);
 }

@@ -54,15 +54,17 @@ export function PatientDetailCard({
     <div>Carregando...</div>
   ) : (
     <div className={styles.patientDetailCard}>
-      <h1>Detalhes do Paciente</h1>
-      <Button
-        onClick={() => onOpenModal("patient_form", uuid, "Editar Paciente")}
-      >
-        Editar
-      </Button>
-      <Button onClick={handleStartRecording}>
-        Iniciar Registro
-      </Button>
+      <h2>Detalhes do Paciente</h2>
+      <div className={styles.buttonsContainer}>
+        <Button
+          onClick={() => onOpenModal("patient_form", uuid, "Editar Paciente")}
+        >
+          Editar
+        </Button>
+        <Button onClick={handleStartRecording}>
+          Iniciar Registro
+        </Button>
+      </div>
 
       <section>
         <h3>Dados Pessoais</h3>

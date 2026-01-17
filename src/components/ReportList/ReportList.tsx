@@ -37,10 +37,15 @@ export function ReportList({
     <div className={styles.reportContainer}>
       <header className={styles.header}>
         <h1>Relatórios</h1>
-        <Button onClick={() => onOpenModal("report_form")}>
+      </header>
+      <div className={styles.button}>
+        <Button
+          onClick={() => onOpenModal("report_form")}
+          style={{ width: "200px" }}
+        >
           Novo Relatório
         </Button>
-      </header>
+      </div>
 
       <div className={styles.reportsGrid}>
         {reports && reports.length > 0 ? (

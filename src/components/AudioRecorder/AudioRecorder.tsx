@@ -79,7 +79,7 @@ export default function AudioRecorder() {
           {(Number(elapsedTime) % 60).toString().padStart(2, "0")}</span>
         </p>
       </div>
-      <div>
+      <div className={styles.buttonsContainer}>
         <Button
           className={styles.viewButton}
           onClick={handleStartRecording}

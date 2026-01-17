@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import styles from "./button.module.css";
 
 interface ButtonProps {
@@ -5,6 +6,7 @@ interface ButtonProps {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   type?: "button" | "submit" | "reset";
   className?: string;
+  style?: CSSProperties;
   disabled?: boolean;
 }
 
@@ -13,11 +15,13 @@ export default function Button({
   onClick,
   type = "button",
   className,
+  style,
   disabled,
 }: ButtonProps) {
   return (
     <button
       className={className || styles.button}
+      style={style}
       onClick={onClick}
       type={type}
       disabled={disabled}

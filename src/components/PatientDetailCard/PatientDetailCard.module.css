@@ -5,6 +5,11 @@
   background-color: var(--color-bg-surface);
 }
 
+.buttonsContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
 .email:hover {
   cursor: pointer;
   transform: scale(1.05);
