@@ -2,7 +2,7 @@ import axios from "axios";
 import { forceLogout } from "../utils/logout";
 
 export const api = axios.create({
-  baseURL: "http://localhost:8000/",
+  baseURL: "https://practicare-fastapi.fly.dev/",
   withCredentials: true,
 });
 
@@ -38,5 +38,5 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );

@@ -15,3 +15,8 @@ export async function getMe() {
   const response = await api.get("/users/me");
   return response.data;
 }
+
+export async function healthChecker() {
+  const response = await api.get("/");
+  return response;
+}
