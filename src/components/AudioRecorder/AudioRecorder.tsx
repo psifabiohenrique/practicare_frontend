@@ -1,4 +1,4 @@
-import styles from "./AudioRecorder.module.css";
+import styles from "./audioRecorder.module.css";
 import { Status } from "../../types/audioRecorderStatus";
 import Button from "../Button/Button";
 import { useRecording } from "./AudioRecorderContext";
