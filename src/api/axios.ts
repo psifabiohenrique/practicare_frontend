@@ -2,7 +2,7 @@ import axios from "axios";
 import { forceLogout } from "../utils/logout";
 
 export const api = axios.create({
-  baseURL: "https://practicare-fastapi.fly.dev/",
+  baseURL: "https://practicare-fastapi.fly.dev",
   withCredentials: true,
 });
 
