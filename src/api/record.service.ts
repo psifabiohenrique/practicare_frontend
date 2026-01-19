@@ -11,19 +11,19 @@ export async function listRecords(
   params?: RecordListParams,
 ): Promise<Record[]> {
   const response = await api.get(
-    `/treatment-records/treatment/${treatment_uuid}/`,
+    `/treatment-records/treatment/${treatment_uuid}`,
     { params },
   );
   return response.data;
 }
 
 export async function getRecord(record_uuid: string): Promise<Record> {
-  const response = await api.get(`/treatment-records/${record_uuid}/`);
+  const response = await api.get(`/treatment-records/${record_uuid}`);
   return response.data;
 }
 
 export async function createRecord(payload: RecordPayload): Promise<Record> {
-  const response = await api.post(`/treatment-records/`, payload);
+  const response = await api.post(`/treatment-records`, payload);
   return response.data;
 }
 
@@ -32,7 +32,7 @@ export async function updateRecord(
   payload: RecordUpdatePayload,
 ): Promise<Record> {
   const response = await api.patch(
-    `/treatment-records/${record_uuid}/`,
+    `/treatment-records/${record_uuid}`,
     payload,
   );
   return response.data;

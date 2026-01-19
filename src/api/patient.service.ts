@@ -7,14 +7,14 @@ import type {
 import { api } from "./axios";
 
 export async function listPatients(
-  params?: PatientListParams
+  params?: PatientListParams,
 ): Promise<Patient[]> {
-  const response = await api.get("/patients-with-treatment/", { params });
+  const response = await api.get("/patients-with-treatment", { params });
   return response.data;
 }
 
 export async function listDailyTreatments(
-  weekday: Weekdays
+  weekday: Weekdays,
 ): Promise<Patient[]> {
   const response = await api.get("/patients-with-treatment/daily", {
     params: { weekday },
@@ -23,7 +23,7 @@ export async function listDailyTreatments(
 }
 
 export async function createPatient(payload: PatientPayload): Promise<Patient> {
-  const response = await api.post("/patients-with-treatment/", payload);
+  const response = await api.post("/patients-with-treatment", payload);
   return response.data;
 }
 
@@ -34,7 +34,7 @@ export async function getPatient(uuid: string): Promise<Patient> {
 
 export async function updatePatient(
   uuid: string,
-  payload: PatientPayload
+  payload: PatientPayload,
 ): Promise<Patient> {
   const response = await api.patch(`/patients-with-treatment/${uuid}`, payload);
   return response.data;

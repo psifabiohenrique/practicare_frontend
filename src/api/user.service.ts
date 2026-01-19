@@ -17,6 +17,6 @@ export async function getMe() {
 }
 
 export async function healthChecker() {
-  const response = await api.get("/");
+  const response = await api.get("");
   return response;
 }
