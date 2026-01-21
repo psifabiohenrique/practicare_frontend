@@ -1,8 +1,11 @@
 import axios from "axios";
 import { forceLogout } from "../utils/logout";
 
+
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export const api = axios.create({
-  baseURL: "https://practicare-fastapi.fly.dev",
+  baseURL: apiUrl,
   withCredentials: true,
 });
 
