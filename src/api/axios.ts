@@ -1,5 +1,5 @@
 import axios from "axios";
-import { forceLogout } from "../utils/logout";
+// import { forceLogout } from "../utils/logout";
 import { useAuth } from "../auth/AuthContext";
 import { getCookie } from "../utils/getCoockie";
 
@@ -37,7 +37,7 @@ api.interceptors.response.use(
       url?.includes("/users/me") ||
       url?.includes("/auth/logout");
 
-    if (status === 401 && !url?.includes("/auth/login")) {
+    if (status === 401 && !url?.includes(isAuthEndpoint)) {
       if (!isLoggingOut) {
         isLoggingOut = true;
         useAuth().forceLogout();
