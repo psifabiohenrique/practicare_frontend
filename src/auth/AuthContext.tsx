@@ -37,7 +37,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function login(email: string, password: string) {
     try {
-      await loginService({ email: email, password });
+      const result = await loginService({ email: email, password });
+      console.log(result)
+      localStorage.setItem('csrf_token', result.csrf_token)
       setIsAuthenticated(true);
     } catch (error: any) {
       if (error.response?.status === 401) {
