@@ -1,7 +1,7 @@
 import axios from "axios";
 // import { forceLogout } from "../utils/logout";
 import { useAuth } from "../auth/AuthContext";
-import { getCookie } from "../utils/getCoockie";
+// import { getCookie } from "../utils/getCoockie";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
