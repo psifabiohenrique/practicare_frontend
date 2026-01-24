@@ -12,6 +12,7 @@ import {
   getPatient,
   updatePatient,
 } from "../../api/patient.service";
+import styles from "./PatientForm.module.css";
 
 interface PatientFormProps {
   uuid?: string;
@@ -50,9 +51,12 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
     setUserUUID(patient.user_uuid);
   }
   useEffect(() => {
-    if (uuid) {
-      fetchPatientInitialData(uuid);
+    async function loadData(uuid: string) {
+      await fetchPatientInitialData(uuid);
       setSubmitButtonText("Atualizar");
+    }
+    if (uuid) {
+      loadData(uuid);
     }
   }, [uuid]);
 
@@ -128,77 +132,80 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
   ];
 
   return (
-    <Form onSubmit={handleSubmit} grid={true}>
+    <Form onSubmit={handleSubmit}>
       {messages &&
         messages.map((message, index) => (
           <MessageCard key={index} message={message} />
         ))}
-
-      <h3>Dados Pessoais</h3>
-      <TextField
-        label="Nome"
-        placeholder="Primeiro nome"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-        required
-      />
-      <TextField
-        label="Sobrenome"
-        placeholder="Sobrenome"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-        required
-      />
-      <TextField
-        label="E-mail"
-        placeholder="E-mail"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <PhoneInput
-        label="Telefone"
-        placeholder="Telefone"
-        value={phone}
-        onChange={(value) => setPhone(value || "")}
-      />
-      <TextField
-        label="Data de Nascimento"
-        type="date"
-        value={birthDate}
-        onChange={(e) => setBirthDate(e.target.value)}
-      />
-      <SelectField
-        label="Gênero"
-        value={gender}
-        onChange={(e) => setGender(e.target.value as Gender)}
-        options={genderOptions}
-        required
-      />
-
-      <h3>Dados do Tratamento</h3>
-      <SelectField
-        label="Dia da Semana"
-        value={weekday}
-        onChange={(e) => setWeekday(e.target.value as Weekdays)}
-        options={weekdayOptions}
-        required
-      />
-      <TextField
-        label="Horário de Início"
-        type="time"
-        value={startTime}
-        onChange={(e) => setStartTime(e.target.value)}
-        required
-      />
-      <TextField
-        label="Horário de Término"
-        type="time"
-        value={endTime}
-        onChange={(e) => setEndTime(e.target.value)}
-        required
-      />
-
+      <div className={styles.grid}>
+        <div style={{minWidth: "300px"}}>
+          <h3>Dados Pessoais</h3>
+          <TextField
+            label="Nome"
+            placeholder="Primeiro nome"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+          <TextField
+            label="Sobrenome"
+            placeholder="Sobrenome"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+          <TextField
+            label="E-mail"
+            placeholder="E-mail"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <PhoneInput
+            label="Telefone"
+            placeholder="Telefone"
+            value={phone}
+            onChange={(value) => setPhone(value || "")}
+          />
+          <TextField
+            label="Data de Nascimento"
+            type="date"
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+          />
+          <SelectField
+            label="Gênero"
+            value={gender}
+            onChange={(e) => setGender(e.target.value as Gender)}
+            options={genderOptions}
+            required
+          />
+        </div>
+        <div style={{minWidth: "300px"}}>
+          <h3>Dados do Tratamento</h3>
+          <SelectField
+            label="Dia da Semana"
+            value={weekday}
+            onChange={(e) => setWeekday(e.target.value as Weekdays)}
+            options={weekdayOptions}
+            required
+          />
+          <TextField
+            label="Horário de Início"
+            type="time"
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+            required
+          />
+          <TextField
+            label="Horário de Término"
+            type="time"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+            required
+          />
+        </div>
+      </div>
       <Button type="submit">{submitButtonText}</Button>
     </Form>
   );
