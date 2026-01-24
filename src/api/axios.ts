@@ -38,15 +38,17 @@ api.interceptors.response.use(
       url?.includes("/users/me") ||
       url?.includes("/auth/logout");
 
-    if (status === 401 && !url?.includes(isAuthEndpoint)) {
+    if (status === 401 && !isAuthEndpoint) {
       if (!isLoggingOut) {
         isLoggingOut = true;
-        useAuth().forceLogout();
-        // window.location.href = "/login";
-
-        // try {
-        //   await api.post("/auth/logout");
-        // } catch {}
+        
+        
+        try {
+          await api.post("/auth/logout");
+        } catch {
+          // Ignore errors during logout
+        }
+        window.location.href = "/login";
       }
       return Promise.reject(error);
     }
