@@ -6,6 +6,7 @@ import {
   formatTime,
   translateWeekday,
   translateGender,
+  translateStatus,
 } from "../../utils/formatters";
 import styles from "./PatientDetailCard.module.css";
 import type { ModalType } from "../../pages/Dashboard/patients/PatientDetailPage";
@@ -101,6 +102,10 @@ export function PatientDetailCard({
           <strong>Horário:</strong>{" "}
           {patient?.start_time && formatTime(patient.start_time)} -{" "}
           {patient?.end_time && formatTime(patient.end_time)}
+        </p>
+        <p>
+          <strong>Status do tratamento:</strong>{" "}
+          {patient?.status && translateStatus(patient.status)}
         </p>
       </section>
     </div>

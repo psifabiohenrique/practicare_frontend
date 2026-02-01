@@ -25,9 +25,20 @@ const weekdayTranslations: Record<string, string> = {
   Sunday: "Domingo",
 };
 
+
 export function translateWeekday(weekday: string): string {
   return weekdayTranslations[weekday] || weekday;
 }
+
+const statusTranslations: Record<string, string> = {
+  Active: "Ativo",
+  Inactive: "Inativo",
+};
+
+export function translateStatus(status: string): string {
+  return statusTranslations[status] || status;
+}
+
 const genderTranslations: Record<string, string> = {
   Male: "Masculino",
   Female: "Feminino",

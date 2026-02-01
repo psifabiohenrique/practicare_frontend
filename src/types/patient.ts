@@ -9,10 +9,13 @@ export type Weekdays =
   | "Saturday"
   | "Sunday";
 
+export type PatientStatus = "Active" | "Inactive";
+
 export interface Patient {
   user_uuid: string;
   patient_uuid: string;
   weekday: Weekdays;
+  status: PatientStatus;
   start_time: string;
   end_time: string;
   uuid: string;

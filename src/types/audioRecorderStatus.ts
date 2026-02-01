@@ -13,11 +13,11 @@ export type StatusType = (typeof Status)[keyof typeof Status];
 export interface RecordingContextData {
   status: StatusType;
   patient: Patient | null;
-  elapsedTime: Number;
+  elapsedTime: number;
   audioChunks: Blob[];
   mediaRecorderRef: MediaRecorder | null;
   streamRef: MediaStream | null;
-  timeRef: Number | null;
+  timeRef: number | null;
   pendingFinalizeRef: RefObject<boolean>;
   devices: MediaDeviceInfo[];
   selectedDeviceId: string;
