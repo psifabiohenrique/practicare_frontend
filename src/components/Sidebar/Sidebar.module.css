@@ -38,6 +38,10 @@
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
   padding: var(--space-md);
   opacity: 1;
   transition: opacity 0.2s ease;
@@ -108,9 +112,32 @@
 }
 
 .treatmentList {
+  flex: 1; /* Ocupa o espaço disponível */
+  overflow-y: auto; /* Adiciona scroll vertical */
+  overflow-x: hidden; /* Previne scroll horizontal */
+  padding-right: 8px; /* Espaço para a scrollbar */
+  padding-inline-start: 5px;
+  margin: 0;
   list-style: none;
-  padding: 0;
-  margin-top: var(--space-md);
+}
+
+/* Estilização opcional da scrollbar (Webkit browsers) */
+.treatmentList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.treatmentList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.treatmentList::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.treatmentList::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .treatmentItem {
