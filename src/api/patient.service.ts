@@ -39,3 +39,8 @@ export async function updatePatient(
   const response = await api.patch(`/patients-with-treatment/${uuid}`, payload);
   return response.data;
 }
+
+export async function deletePatient(uuid: string): Promise<Patient> {
+  const response = await api.post(`/patients-with-treatment/${uuid}`);
+  return response.data;
+}

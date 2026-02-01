@@ -11,7 +11,7 @@ import {
 import styles from "./PatientDetailCard.module.css";
 import type { ModalType } from "../../pages/Dashboard/patients/PatientDetailPage";
 import { useEffect, useState } from "react";
-import { getPatient } from "../../api/patient.service";
+import { deletePatient, getPatient } from "../../api/patient.service";
 import { useRecording } from "../AudioRecorder/AudioRecorderContext";
 
 interface PatientDetailCardProps {
@@ -51,6 +51,17 @@ export function PatientDetailCard({
     }
   }
 
+  async function handleDeletePatient(uuid: string) {
+    if (confirm(`Tem certeza que deseja ${patient?.status === 'Active' ? 'encerrar' : 'ativar'} este tratamento?`)) {
+      const result = await deletePatient(uuid);
+
+      if (result) {
+        alert(`Tratamento ${patient?.status === 'Active' ? 'encerrado' : 'ativado'} com sucesso!`);
+        setPatient(result);
+      }
+    }
+  }
+
   return isLoading ? (
     <div>Carregando...</div>
   ) : (
@@ -62,9 +73,7 @@ export function PatientDetailCard({
         >
           Editar
         </Button>
-        <Button onClick={handleStartRecording}>
-          Iniciar Registro
-        </Button>
+        <Button onClick={handleStartRecording}>Iniciar Registro</Button>
       </div>
 
       <section>
@@ -108,6 +117,20 @@ export function PatientDetailCard({
           {patient?.status && translateStatus(patient.status)}
         </p>
       </section>
+      <div className={styles.buttonsContainer}>
+        <Button
+          onClick={() => handleDeletePatient(uuid)}
+          style={
+            patient?.status == "Active"
+              ? { backgroundColor: "var(--color-error)" }
+              : { backgroundColor: "var(--color-success)" }
+          }
+        >
+          {patient?.status === "Active"
+            ? "Encerrar Tratamento"
+            : "Reativar Tratamento"}
+        </Button>
+      </div>
     </div>
   );
 }

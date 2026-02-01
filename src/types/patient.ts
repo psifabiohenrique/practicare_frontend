@@ -74,5 +74,6 @@ export interface PatientListParams {
   order_dir?: "asc" | "desc";
   gender?: Gender;
   weekday?: Weekdays;
+  status?: PatientStatus;
   search?: string;
 }

@@ -6,6 +6,7 @@ import type {
   PatientListParams,
   Gender,
   Weekdays,
+  PatientStatus,
 } from "../../../types/patient";
 import TextField from "../../../components/TextField/TextField";
 import SelectField from "../../../components/SelectField/SelectField";
@@ -21,6 +22,7 @@ export function PatientListPage() {
     search: "",
     gender: undefined,
     weekday: undefined,
+    status: undefined,
     order_by: "name",
     order_dir: "asc",
   });
@@ -94,6 +96,16 @@ export function PatientListPage() {
     });
   };
 
+  const handlePatientStatusChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setParams({
+      ...params,
+      status: (e.target.value as PatientStatus) || undefined,
+      skip: 0,
+    });
+  };
+
   const handlePageChange = (newSkip: number) => {
     setParams({ ...params, skip: newSkip });
     fetchPatientsWithParams({ ...params, skip: newSkip });
@@ -113,6 +125,11 @@ export function PatientListPage() {
     { label: "Sexta-feira", value: "Friday" },
     { label: "Sábado", value: "Saturday" },
     { label: "Domingo", value: "Sunday" },
+  ];
+
+  const patientStatusOptions = [
+    { label: "Ativo", value: "Active" },
+    { label: "Inativo", value: "Inactive" },
   ];
 
   return (
@@ -137,6 +154,12 @@ export function PatientListPage() {
           value={params.weekday || ""}
           onChange={handleWeekdayChange}
           options={weekdayOptions}
+        />
+        <SelectField
+          label="Status do tratamento"
+          value={params.status || ""}
+          onChange={handlePatientStatusChange}
+          options={patientStatusOptions}
         />
         <Button type="submit">Buscar</Button>
       </form>
