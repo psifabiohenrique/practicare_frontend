@@ -223,8 +223,14 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
     formData.append("audio_file", audioBlob);
     formData.append("session_date", new Date().toISOString().split("T")[0]);
     try {
-      await submitAutomatedRecord(patient.uuid, formData);
-      alert("Áudio enviado com sucesso!");
+      submitAutomatedRecord(patient.uuid, formData)
+        .catch((error) => {
+          console.error("Error submitting automated record:", error);
+          alert("Erro ao enviar o áudio automaticamente.");
+        })
+        .finally(() => {
+          alert("Áudio enviado com sucesso!");
+        });
       clearPatient();
       setStatus(Status.idle);
       statusRef.current = Status.idle;
