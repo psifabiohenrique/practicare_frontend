@@ -33,6 +33,7 @@ export function RecordDetail({ recordUuid }: RecordDetailProps) {
   const handleCopyContent = () => {
     if (record?.content) {
       navigator.clipboard.writeText(record.content);
+      alert("Conteúdo copiado para a área de transferência!");
     }
   };
 
