@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, {
   createContext,
   useContext,
@@ -226,10 +227,10 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
       submitAutomatedRecord(patient.uuid, formData)
         .catch((error) => {
           console.error("Error submitting automated record:", error);
-          alert("Erro ao enviar o áudio automaticamente.");
+          alert(`Atenção!!! \n\n Erro ao enviar o áudio do atendimento de ${patient.patient.first_name} automaticamente.`);
         })
         .finally(() => {
-          alert("Áudio enviado com sucesso!");
+          alert(`Áudio do atendimento de ${patient.patient.first_name} enviado com sucesso!`);
         });
       clearPatient();
       setStatus(Status.idle);
