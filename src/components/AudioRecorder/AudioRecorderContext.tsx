@@ -12,7 +12,10 @@ import type {
   RecordingContextData,
 } from "../../types/audioRecorderStatus";
 import type { Patient } from "../../types/patient";
-import { submitAutomatedRecord } from "../../api/record.service";
+import {
+  startAutomatedRecordUpload,
+  uploadInChunks,
+} from "../../api/record.service";
 
 const RecordingContext = createContext<RecordingContextData | undefined>(
   undefined,
@@ -220,18 +223,26 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
     a.click();
     URL.revokeObjectURL(url);
     // upload
-    const formData = new FormData();
-    formData.append("audio_file", audioBlob);
-    formData.append("session_date", new Date().toISOString().split("T")[0]);
     try {
-      submitAutomatedRecord(patient.uuid, formData)
+      const session_date = new Date().toISOString().split("T")[0];
+      const { job_uuid } = await startAutomatedRecordUpload(
+        patient.uuid,
+        session_date,
+      );
+
+      await uploadInChunks(job_uuid, audioBlob)
         .catch((error) => {
           console.error("Error submitting automated record:", error);
-          alert(`Atenção!!! \n\n Erro ao enviar o áudio do atendimento de ${patient.patient.first_name} automaticamente.`);
+          alert(
+            `Atenção!!! \n\n Erro ao enviar o áudio do atendimento de ${patient.patient.first_name} automaticamente.`,
+          );
         })
         .finally(() => {
-          alert(`Áudio do atendimento de ${patient.patient.first_name} enviado com sucesso!`);
+          alert(
+            `Áudio do atendimento de ${patient.patient.first_name} enviado com sucesso!`,
+          );
         });
+
       clearPatient();
       setStatus(Status.idle);
       statusRef.current = Status.idle;

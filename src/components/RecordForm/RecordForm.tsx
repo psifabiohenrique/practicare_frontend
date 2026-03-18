@@ -2,8 +2,9 @@ import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import {
   createRecord,
   getRecord,
-  reuploadAutomatedRecord,
+  startAutomatedRecordReload,
   updateRecord,
+  uploadInChunks,
 } from "../../api/record.service";
 import Form from "../Form/Form";
 import TextField from "../TextField/TextField";
@@ -79,16 +80,21 @@ export function RecordForm({
   const handleReuploadAudio = async () => {
     try {
       if (file && recordUuid) {
-        const formData = new FormData();
-        formData.append("audio_file", file);
-        await reuploadAutomatedRecord(recordUuid, formData);
+        setIsLoading(true);
+        const { job_uuid } = await startAutomatedRecordReload(recordUuid);
+
+        await uploadInChunks(job_uuid, file);
+
         setMessages([
           "Áudio enviado com sucesso, aguarde que ele será reprocessado",
         ]);
         setContent("O áudio será reprocessado em background!");
       }
-    } catch {
+    } catch (error) {
+      console.error("Error reuploading audio:", error);
       setMessages(["Falha ao enviar o áudio, tente novamente em breve."]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
