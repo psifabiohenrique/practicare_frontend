@@ -26,6 +26,22 @@ function formatTokens(count: number): string {
   return `${(count / 1_000_000).toFixed(2)}M`;
 }
 
+function formatCurrency(value: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  }).format(value);
+}
+
+const INPUT_PRICE = Number(
+  import.meta.env.VITE_INPUT_TOKEN_PRICE_PER_MILLION || 0.5,
+);
+const OUTPUT_PRICE = Number(
+  import.meta.env.VITE_OUTPUT_TOKEN_PRICE_PER_MILLION || 1.5,
+);
+
 function getDefaultDates(): { start: string; end: string } {
   const end = new Date();
   const start = new Date();
@@ -47,6 +63,13 @@ export function DashboardPage() {
 
   const { data: stats, isLoading: statsLoading, error } = useDashboard(params);
 
+  const totalCost = useMemo(() => {
+    if (!stats) return 0;
+    const inputCost = (stats.total_input_tokens / 1_000_000) * INPUT_PRICE;
+    const outputCost = (stats.total_output_tokens / 1_000_000) * OUTPUT_PRICE;
+    return inputCost + outputCost;
+  }, [stats]);
+
   const handleApplyFilter = (startDate: string, endDate: string) => {
     setParams({ start_date: startDate, end_date: endDate });
   };
@@ -66,9 +89,7 @@ export function DashboardPage() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <h1 className={styles.title}>
-          Bem-vindo ao Practicare, {user?.name}
-        </h1>
+        <h1 className={styles.title}>Bem-vindo ao Practicare, {user?.name}</h1>
         <p className={styles.subtitle}>
           Acompanhe suas estatísticas de uso e produtividade.
         </p>
@@ -104,6 +125,11 @@ export function DashboardPage() {
                 )}
                 subtitle="Entrada + Saída"
               />
+              <StatCard
+                label="Custo estimado (USD)"
+                value={formatCurrency(totalCost)}
+                subtitle="Tokens de Entrada e Saída"
+              />
             </div>
           </div>
 
@@ -116,7 +142,7 @@ export function DashboardPage() {
                 subtitle="Áudio original"
               />
               <StatCard
-                label="Duração após VAD"
+                label="Duração após processamento"
                 value={formatDuration(stats.total_audio_duration_after_vad)}
                 subtitle="Áudio processado"
               />
