@@ -90,6 +90,7 @@ export function ReportForm({
           setProcedures(result.procedures);
           setAnalysis(result.analysis);
           setConclusion(result.conclusion);
+          onSuccess();
         } catch {
           setMessages([
             "Falha ao realizar solicitação, verifique as datas inseridas ou tente novamente mais tarde.",

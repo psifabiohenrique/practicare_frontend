@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { PatientDetailCard } from "../../../components/PatientDetailCard/PatientDetailCard";
 import { RecordList } from "../../../components/RecordList/RecordList";
@@ -30,10 +30,29 @@ export function PatientDetailPage() {
   const [refreshRecordsKey, setRefreshRecordsKey] = useState(0);
   const [refreshReportsKey, setRefreshReportsKey] = useState(0);
   const [refreshPatientKey, setRefreshPatientKey] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const [modalState, setModalState] = useState<ModalState>({
     type: null,
   });
+
+  useEffect(() => {
+    setIsTransitioning(true);
+    const timer = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 400); // Exibe o overlay de transição por 400ms para limpar o estado antigo
+    return () => clearTimeout(timer);
+  }, [uuid]);
+
+  useEffect(() => {
+    const handleAiRecordCreated = () => {
+      setRefreshRecordsKey((prev) => prev + 1);
+    };
+    window.addEventListener("ai_record_created", handleAiRecordCreated);
+    return () => {
+      window.removeEventListener("ai_record_created", handleAiRecordCreated);
+    };
+  }, []);
 
   const handleOpenModal = useCallback(
     (type: ModalType, uuid?: string, title?: string) => {
@@ -106,8 +125,16 @@ export function PatientDetailPage() {
     }
   };
 
+  if (isTransitioning) {
+    return (
+      <div className={styles.patientDetailPage} style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+        <h2>Carregando informações do paciente...</h2>
+      </div>
+    );
+  }
+
   return (
-    <div className={styles.patientDetailPage}>
+    <div className={styles.patientDetailPage} key={uuid}>
       <PatientDetailCard
         uuid={uuid!}
         onOpenModal={handleOpenModal}

@@ -243,6 +243,8 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
           );
         });
 
+      window.dispatchEvent(new CustomEvent("ai_record_created"));
+
       clearPatient();
       setStatus(Status.idle);
       statusRef.current = Status.idle;
