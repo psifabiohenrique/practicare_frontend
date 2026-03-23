@@ -19,10 +19,18 @@ export function RecordList({
 }: RecordListProps) {
   const [records, setRecords] = useState<Record[]>([]);
   const [params, setParams] = useState({ skip: 0, limit: 4 });
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchRecords = useCallback(async () => {
-    const records = await listRecords(treatmentId, params);
-    setRecords(records);
+    setIsLoading(true);
+    try {
+      const records = await listRecords(treatmentId, params);
+      setRecords(records);
+    } catch (err) {
+      console.error("Error fetching records:", err);
+    } finally {
+      setIsLoading(false);
+    }
   }, [treatmentId, params]);
 
   useEffect(() => {
@@ -44,7 +52,9 @@ export function RecordList({
       </Button>
       </div>
       <div className={styles.recordsGrid}>
-        {records && records.length > 0 ? (
+        {isLoading ? (
+          <p>Carregando prontuários...</p>
+        ) : records && records.length > 0 ? (
           records.map((record) => (
             <RecordListCard
               key={record.uuid}
@@ -62,11 +72,14 @@ export function RecordList({
           onClick={() =>
             setParams({ ...params, skip: Math.max(0, params.skip - 4) })
           }
-          disabled={params.skip === 0}
+          disabled={params.skip === 0 || isLoading}
         >
           Anterior
         </Button>
-        <Button onClick={() => setParams({ ...params, skip: params.skip + 4 })}>
+        <Button 
+          onClick={() => setParams({ ...params, skip: params.skip + 4 })}
+          disabled={isLoading}
+        >
           Próximo
         </Button>
       </div>

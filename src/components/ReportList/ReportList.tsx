@@ -19,13 +19,17 @@ export function ReportList({
 }: ReportListProps) {
   const [reports, setReports] = useState<Report[]>([]);
   const [params, setParams] = useState({ skip: 0, limit: 4 });
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchReports = useCallback(async () => {
+    setIsLoading(true);
     try {
       const data = await listReports(treatmentId, params);
       setReports(data);
     } catch (err) {
       console.error("Error fetching reports:", err);
+    } finally {
+      setIsLoading(false);
     }
   }, [treatmentId, params]);
 
@@ -42,13 +46,16 @@ export function ReportList({
         <Button
           onClick={() => onOpenModal("report_form")}
           style={{ width: "200px" }}
+          disabled={isLoading}
         >
           Novo Relatório
         </Button>
       </div>
 
       <div className={styles.reportsGrid}>
-        {reports && reports.length > 0 ? (
+        {isLoading ? (
+          <p>Carregando relatórios...</p>
+        ) : reports && reports.length > 0 ? (
           reports.map((report) => (
             <ReportListCard
               key={report.uuid}
@@ -66,11 +73,14 @@ export function ReportList({
           onClick={() =>
             setParams({ ...params, skip: Math.max(0, params.skip - 4) })
           }
-          disabled={params.skip === 0}
+          disabled={params.skip === 0 || isLoading}
         >
           Anterior
         </Button>
-        <Button onClick={() => setParams({ ...params, skip: params.skip + 4 })}>
+        <Button 
+          onClick={() => setParams({ ...params, skip: params.skip + 4 })}
+          disabled={isLoading}
+        >
           Próximo
         </Button>
       </div>
