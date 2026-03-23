@@ -250,6 +250,8 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       console.error("Error submitting record:", error);
       alert("Erro ao enviar áudio.");
+    } finally {
+      clearPatient();
     }
   };
 
