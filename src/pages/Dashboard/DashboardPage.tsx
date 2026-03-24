@@ -44,8 +44,7 @@ const OUTPUT_PRICE = Number(
 
 function getDefaultDates(): { start: string; end: string } {
   const end = new Date();
-  const start = new Date();
-  start.setDate(start.getDate() - 30);
+  const start = new Date(end.getFullYear(), end.getMonth(), 1);
   return {
     start: start.toISOString().split("T")[0],
     end: end.toISOString().split("T")[0],
@@ -74,7 +73,7 @@ export function DashboardPage() {
     setParams({ start_date: startDate, end_date: endDate });
   };
 
-  if (userLoading || statsLoading) {
+  if (userLoading) {
     return <div className={styles.loading}>Carregando...</div>;
   }
 
@@ -97,94 +96,101 @@ export function DashboardPage() {
 
       <div className={styles.filterSection}>
         <DateRangeFilter
-          defaultStartDate={defaults.start}
-          defaultEndDate={defaults.end}
+          initialStartDate={params.start_date ?? defaults.start}
+          initialEndDate={params.end_date ?? defaults.end}
           onApply={handleApplyFilter}
+          isLoading={statsLoading}
         />
       </div>
 
-      {stats && (
-        <>
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Consumo de IA</h2>
-            <div className={styles.grid}>
-              <StatCard
-                label="Tokens de entrada"
-                value={formatTokens(stats.total_input_tokens)}
-                subtitle={`${stats.total_input_tokens.toLocaleString("pt-BR")} tokens`}
-              />
-              <StatCard
-                label="Tokens de saída"
-                value={formatTokens(stats.total_output_tokens)}
-                subtitle={`${stats.total_output_tokens.toLocaleString("pt-BR")} tokens`}
-              />
-              <StatCard
-                label="Total de tokens"
-                value={formatTokens(
-                  stats.total_input_tokens + stats.total_output_tokens,
-                )}
-                subtitle="Entrada + Saída"
-              />
-              <StatCard
-                label="Custo estimado (USD)"
-                value={formatCurrency(totalCost)}
-                subtitle="Tokens de Entrada e Saída"
-              />
+      {statsLoading ? (
+        <div className={styles.statsLoading}>
+          <p>Carregando estatísticas...</p>
+        </div>
+      ) : (
+        stats && (
+          <>
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Consumo de IA</h2>
+              <div className={styles.grid}>
+                <StatCard
+                  label="Tokens de entrada"
+                  value={formatTokens(stats.total_input_tokens)}
+                  subtitle={`${stats.total_input_tokens.toLocaleString("pt-BR")} tokens`}
+                />
+                <StatCard
+                  label="Tokens de saída"
+                  value={formatTokens(stats.total_output_tokens)}
+                  subtitle={`${stats.total_output_tokens.toLocaleString("pt-BR")} tokens`}
+                />
+                <StatCard
+                  label="Total de tokens"
+                  value={formatTokens(
+                    stats.total_input_tokens + stats.total_output_tokens,
+                  )}
+                  subtitle="Entrada + Saída"
+                />
+                <StatCard
+                  label="Custo estimado (USD)"
+                  value={formatCurrency(totalCost)}
+                  subtitle="Tokens de Entrada e Saída"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Áudio</h2>
-            <div className={styles.grid}>
-              <StatCard
-                label="Duração total enviada"
-                value={formatDuration(stats.total_audio_duration)}
-                subtitle="Áudio original"
-              />
-              <StatCard
-                label="Duração após processamento"
-                value={formatDuration(stats.total_audio_duration_after_vad)}
-                subtitle="Áudio processado"
-              />
-              <StatCard
-                label="Transcrições"
-                value={stats.total_transcriptions}
-                subtitle="No período"
-              />
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Áudio</h2>
+              <div className={styles.grid}>
+                <StatCard
+                  label="Duração total enviada"
+                  value={formatDuration(stats.total_audio_duration)}
+                  subtitle="Áudio original"
+                />
+                <StatCard
+                  label="Duração após processamento"
+                  value={formatDuration(stats.total_audio_duration_after_vad)}
+                  subtitle="Áudio processado"
+                />
+                <StatCard
+                  label="Transcrições"
+                  value={stats.total_transcriptions}
+                  subtitle="No período"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Produtividade</h2>
-            <div className={styles.grid}>
-              <StatCard
-                label="Prontuários gerados (IA)"
-                value={stats.total_records_generated}
-                subtitle="Gerados automaticamente"
-              />
-              <StatCard
-                label="Relatórios gerados (IA)"
-                value={stats.total_reports_generated}
-                subtitle="Gerados automaticamente"
-              />
-              <StatCard
-                label="Prontuários criados"
-                value={stats.records_count}
-                subtitle="Total no período"
-              />
-              <StatCard
-                label="Relatórios criados"
-                value={stats.reports_count}
-                subtitle="Total no período"
-              />
-              <StatCard
-                label="Tratamentos ativos"
-                value={stats.active_treatments_count}
-                subtitle="Atualmente"
-              />
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Produtividade</h2>
+              <div className={styles.grid}>
+                <StatCard
+                  label="Prontuários gerados (IA)"
+                  value={stats.total_records_generated}
+                  subtitle="Gerados automaticamente"
+                />
+                <StatCard
+                  label="Relatórios gerados (IA)"
+                  value={stats.total_reports_generated}
+                  subtitle="Gerados automaticamente"
+                />
+                <StatCard
+                  label="Prontuários criados"
+                  value={stats.records_count}
+                  subtitle="Total no período"
+                />
+                <StatCard
+                  label="Relatórios criados"
+                  value={stats.reports_count}
+                  subtitle="Total no período"
+                />
+                <StatCard
+                  label="Tratamentos ativos"
+                  value={stats.active_treatments_count}
+                  subtitle="Atualmente"
+                />
+              </div>
             </div>
-          </div>
-        </>
+          </>
+        )
       )}
     </div>
   );
