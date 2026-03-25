@@ -230,25 +230,25 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
         session_date,
       );
 
+      clearPatient();
+      setStatus(Status.idle);
+      statusRef.current = Status.idle;
+      if (timeRef.current) clearInterval(timeRef.current);
+
       await uploadInChunks(job_uuid, audioBlob)
+        .then(() => {
+          alert(
+            `Áudio do atendimento de ${patient.patient.first_name} enviado com sucesso!`,
+          );
+        })
         .catch((error) => {
           console.error("Error submitting automated record:", error);
           alert(
             `Atenção!!! \n\n Erro ao enviar o áudio do atendimento de ${patient.patient.first_name} automaticamente.`,
           );
-        })
-        .finally(() => {
-          alert(
-            `Áudio do atendimento de ${patient.patient.first_name} enviado com sucesso!`,
-          );
         });
 
       window.dispatchEvent(new CustomEvent("ai_record_created"));
-
-      clearPatient();
-      setStatus(Status.idle);
-      statusRef.current = Status.idle;
-      if (timeRef.current) clearInterval(timeRef.current);
     } catch (error) {
       console.error("Error submitting record:", error);
       alert("Erro ao enviar áudio.");
