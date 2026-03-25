@@ -30,14 +30,20 @@ export function PatientDetailPage() {
   const [refreshRecordsKey, setRefreshRecordsKey] = useState(0);
   const [refreshReportsKey, setRefreshReportsKey] = useState(0);
   const [refreshPatientKey, setRefreshPatientKey] = useState(0);
+  const [prevUuid, setPrevUuid] = useState(uuid);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Synchronize transition state during render to avoid duplicate fetches
+  if (uuid !== prevUuid) {
+    setPrevUuid(uuid);
+    setIsTransitioning(true);
+  }
 
   const [modalState, setModalState] = useState<ModalState>({
     type: null,
   });
 
   useEffect(() => {
-    setIsTransitioning(true);
     const timer = setTimeout(() => {
       setIsTransitioning(false);
     }, 400); // Exibe o overlay de transição por 400ms para limpar o estado antigo
