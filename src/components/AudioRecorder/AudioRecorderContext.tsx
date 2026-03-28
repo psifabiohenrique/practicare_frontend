@@ -252,23 +252,22 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
         session_date,
       );
 
-      clearPatient();
-
-      await uploadInChunks(job_uuid, audioBlob)
-        .then(() => {
-          alert(`Áudio do atendimento de ${patientName} enviado com sucesso!`);
-        })
-        .catch((error) => {
-          console.error("Error submitting automated record:", error);
-          alert(
-            `Atenção!!! \n\n Erro ao enviar o áudio do atendimento de ${patientName} automaticamente.`,
-          );
-        });
+      try {
+        await uploadInChunks(job_uuid, audioBlob);
+        alert(`Áudio do atendimento de ${patientName} enviado com sucesso!`);
+      } catch (uploadError) {
+        console.error("Error submitting automated record chunks:", uploadError);
+        alert(
+          `Atenção!!! \n\n Erro ao enviar o áudio do atendimento de ${patientName} automaticamente.\n\nA gravação foi baixada localmente como backup.`,
+        );
+      }
 
       window.dispatchEvent(new CustomEvent("ai_record_created"));
-    } catch (error) {
-      console.error("Error submitting record:", error);
-      alert(`Erro ao iniciar o envio do áudio para ${patientName}.`);
+    } catch (startError) {
+      console.error("Error starting record upload:", startError);
+      alert(
+        `Erro ao iniciar o envio do áudio para ${patientName}.\n\nA gravação foi baixada localmente como backup.`,
+      );
     } finally {
       clearPatient();
     }
