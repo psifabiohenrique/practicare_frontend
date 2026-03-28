@@ -3,7 +3,7 @@ import { register } from "../../api/user.service";
 import Form from "../Form/Form";
 import TextField from "../TextField/TextField";
 import Button from "../Button/Button";
-import { MessageCard } from "../MessageCard/MessageCard";
+import { showSuccess, showError, showWarning } from "../../utils/swal";
 import { validateRegister } from "./registerValidation";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,6 @@ export function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password_confirmation, setPasswordConfirmation] = useState("");
-  const [messages, setMessages] = useState<string[] | null>(null);
 
   const navigate = useNavigate();
 
@@ -25,7 +24,7 @@ export function RegisterForm() {
       password_confirmation,
     });
     if (Object.keys(errors).length > 0) {
-      setMessages(Object.values(errors));
+      showWarning("Dados inválidos", Object.values(errors).join("\n"));
       return;
     }
     try {
@@ -35,18 +34,16 @@ export function RegisterForm() {
         password,
         password_confirmation,
       });
-      setMessages(["Usuário cadastrado com sucesso!"]);
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+      await showSuccess("Sucesso", "Usuário cadastrado com sucesso!");
+      navigate("/login");
     } catch (error) {
-      setMessages(["Erro ao cadastrar usuário"]);
+      console.error(error);
+      showError("Erro", "Erro ao cadastrar usuário");
     }
   }
 
   return (
     <Form onSubmit={handleSubmit}>
-      {messages && messages.map((message) => <MessageCard message={message} />)}
       <TextField
         label="Nome"
         placeholder="Nome"

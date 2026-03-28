@@ -4,7 +4,7 @@ import TextField from "../TextField/TextField";
 import PhoneInput from "../PhoneInput/PhoneInput";
 import SelectField from "../SelectField/SelectField";
 import Button from "../Button/Button";
-import { MessageCard } from "../MessageCard/MessageCard";
+import { showSuccess, showError, showWarning } from "../../utils/swal";
 import { validatePatient } from "./patientValidation";
 import type { PatientPayload, Gender, Weekdays } from "../../types/patient";
 import {
@@ -32,10 +32,6 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
   const [userUUID, setUserUUID] = useState<string>("");
 
   const [submitButtonText, setSubmitButtonText] = useState<string>("Salvar");
-
-  const [messages, setMessages] = useState<string[] | null>(null);
-
-  const successMessage = "Operação realizada com sucesso!";
 
   async function fetchPatientInitialData(uuid: string) {
     const patient = await getPatient(uuid);
@@ -83,7 +79,7 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
 
     const errors = validatePatient(payload);
     if (Object.keys(errors).length > 0) {
-      setMessages(Object.values(errors));
+      showWarning("Dados inválidos", Object.values(errors).join("\n"));
       return;
     }
 
@@ -93,6 +89,9 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
       } else {
         await createPatient(payload);
       }
+      
+      await showSuccess("Sucesso", "Operação realizada com sucesso!");
+
       if (!uuid) {
         // Clear form only on create
         setFirstName("");
@@ -105,13 +104,12 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
         setStartTime("");
         setEndTime("");
       }
-      setMessages([successMessage]);
       if (onSuccess) {
         onSuccess();
       }
     } catch (error) {
-      console.log(error);
-      setMessages(["Erro ao processar a solicitação"]);
+      console.error(error);
+      showError("Erro", "Erro ao processar a solicitação");
     }
   }
 
@@ -133,10 +131,6 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      {messages &&
-        messages.map((message, index) => (
-          <MessageCard key={index} message={message} />
-        ))}
       <div className={styles.grid}>
         <div style={{minWidth: "300px"}}>
           <h3>Dados Pessoais</h3>

@@ -9,8 +9,7 @@ import Form from "../Form/Form";
 import TextField from "../TextField/TextField";
 import { TextArea } from "../TextArea/TextArea";
 import Button from "../Button/Button";
-import { MessageCard } from "../MessageCard/MessageCard";
-import { showConfirm } from "../../utils/swal";
+import { showConfirm, showSuccess, showError } from "../../utils/swal";
 import type {
   ReportPayload,
   ReportUpdatePayload,
@@ -41,7 +40,6 @@ export function ReportForm({
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [messages, setMessages] = useState<string[] | null>(null);
 
   const isUpdate = !!reportUuid;
 
@@ -60,7 +58,7 @@ export function ReportForm({
           setEndDatePeriod(report.end_date_period);
         } catch (err) {
           console.error("Error fetching report for form:", err);
-          setMessages(["Erro ao carregar dados para edição."]);
+          showError("Erro", "Erro ao carregar dados para edição.");
         } finally {
           setIsFetching(false);
         }
@@ -85,18 +83,16 @@ export function ReportForm({
             end_date_period: endDatePeriod,
           };
           const result = await createReportWithAi(treatmentUuid, payload);
-          setMessages([
-            "Solicitação enviado com sucesso, aguarde o processamento",
-          ]);
+          
+          await showSuccess("Sucesso", "Solicitação enviada com sucesso, aguarde o processamento.");
+          
           setDemandDescription(result.demand_description);
           setProcedures(result.procedures);
           setAnalysis(result.analysis);
           setConclusion(result.conclusion);
           onSuccess();
         } catch {
-          setMessages([
-            "Falha ao realizar solicitação, verifique as datas inseridas ou tente novamente mais tarde.",
-          ]);
+          showError("Erro", "Falha ao realizar solicitação, verifique as datas inseridas ou tente novamente mais tarde.");
         }
       }
     }
@@ -104,7 +100,6 @@ export function ReportForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessages(null);
     setIsLoading(true);
 
     try {
@@ -135,9 +130,7 @@ export function ReportForm({
       onSuccess();
     } catch (err) {
       console.error("Error saving report:", err);
-      setMessages([
-        "Erro ao salvar o relatório. Verifique os dados e tente novamente.",
-      ]);
+      showError("Erro", "Erro ao salvar o relatório. Verifique os dados e tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -147,11 +140,6 @@ export function ReportForm({
 
   return (
     <Form onSubmit={handleSubmit} grid={false}>
-      {messages &&
-        messages.map((message, index) => (
-          <MessageCard key={index} message={message} />
-        ))}
-
       <TextField
         label="Data de Emissão"
         type="date"

@@ -4,7 +4,7 @@ import TextField from "../../components/TextField/TextField";
 import Button from "../../components/Button/Button";
 import Form from "../../components/Form/Form";
 import { Link, useNavigate } from "react-router-dom";
-import { MessageCard } from "../../components/MessageCard/MessageCard";
+import { showSuccess, showError } from "../../utils/swal";
 import styles from "./LoginCreatePage.module.css";
 
 export function LoginPage() {
@@ -12,29 +12,22 @@ export function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState<{
-    title: string;
-    message: string;
-  } | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
-    setMessage(null);
     e.preventDefault();
     try {
       await login(email, password);
-      setMessage({ title: "Sucesso", message: "Login realizado com sucesso!" });
+      await showSuccess("Sucesso", "Login realizado com sucesso!");
       navigate("/");
     } catch (error) {
-      setMessage({ title: "Erro", message: "Erro ao fazer login" });
+      console.error(error);
+      showError("Erro", "Erro ao fazer login. Verifique suas credenciais.");
     }
   }
 
   return (
     <div className={styles.loginContainer}>
       <h1>Login</h1>
-      {message && (
-        <MessageCard title={message.title} message={message.message} />
-      )}
       <Form onSubmit={handleSubmit}>
         <TextField
           label="Email"

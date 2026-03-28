@@ -10,7 +10,7 @@ import Form from "../Form/Form";
 import TextField from "../TextField/TextField";
 import { TextArea } from "../TextArea/TextArea";
 import Button from "../Button/Button";
-import { MessageCard } from "../MessageCard/MessageCard";
+import { showSuccess, showError } from "../../utils/swal";
 import type { RecordPayload, RecordUpdatePayload } from "../../types/record";
 import styles from "./RecordForm.module.css";
 import { getPatient } from "../../api/patient.service";
@@ -33,7 +33,6 @@ export function RecordForm({
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [messages, setMessages] = useState<string[] | null>(null);
 
   const [fileName, setFileName] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -53,7 +52,7 @@ export function RecordForm({
           setContent(record.content);
         } catch (err) {
           console.error("Error fetching record for form:", err);
-          setMessages(["Erro ao carregar dados para edição."]);
+          showError("Erro", "Erro ao carregar dados para edição.");
         } finally {
           setIsFetching(false);
         }
@@ -68,14 +67,14 @@ export function RecordForm({
           setEndTime(treatment.end_time.substring(0, 5));
         } catch (err) {
           console.error("Error fetching treatment for form:", err);
-          setMessages(["Erro ao carregar dados para edição."]);
+          showError("Erro", "Erro ao carregar dados para edição.");
         } finally {
           setIsFetching(false);
         }
       }
       fetchTreatment();
     }
-  }, [recordUuid]);
+  }, [recordUuid, treatmentUuid]);
 
   const handleReuploadAudio = async () => {
     try {
@@ -85,14 +84,12 @@ export function RecordForm({
 
         await uploadInChunks(job_uuid, file);
 
-        setMessages([
-          "Áudio enviado com sucesso, aguarde que ele será reprocessado",
-        ]);
+        await showSuccess("Sucesso", "Áudio enviado com sucesso, aguarde que ele será reprocessado.");
         setContent("O áudio será reprocessado em background!");
       }
     } catch (error) {
       console.error("Error reuploading audio:", error);
-      setMessages(["Falha ao enviar o áudio, tente novamente em breve."]);
+      showError("Erro", "Falha ao enviar o áudio, tente novamente em breve.");
     } finally {
       setIsLoading(false);
     }
@@ -111,7 +108,6 @@ export function RecordForm({
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessages(null);
     setIsLoading(true);
 
     try {
@@ -136,9 +132,7 @@ export function RecordForm({
       onSuccess();
     } catch (err) {
       console.error("Error saving record:", err);
-      setMessages([
-        "Erro ao salvar o registro. Verifique os dados e tente novamente.",
-      ]);
+      showError("Erro", "Erro ao salvar o registro. Verifique os dados e tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -148,11 +142,6 @@ export function RecordForm({
 
   return (
     <Form onSubmit={handleSubmit} grid={false}>
-      {messages &&
-        messages.map((message, index) => (
-          <MessageCard key={index} message={message} />
-        ))}
-
       <div className={styles.row}>
         <TextField
           label="Data"

@@ -4,7 +4,7 @@ import type { UpdatePayload } from "../../../types/user";
 import TextField from "../../../components/TextField/TextField";
 import Button from "../../../components/Button/Button";
 import { useUser } from "../../../hooks/useUser";
-import { MessageCard } from "../../../components/MessageCard/MessageCard";
+import { showSuccess, showError } from "../../../utils/swal";
 
 export function UpdateUserPage() {
   const [user, setUser] = useState<UpdatePayload>({
@@ -15,8 +15,6 @@ export function UpdateUserPage() {
   });
 
   const { data: me, isLoading, refetch } = useUser();
-  const [message, setMessage] = useState<string>("");
-  const [showMessage, setShowMessage] = useState<boolean>(false);
 
   useEffect(() => {
     if (me) {
@@ -33,12 +31,11 @@ export function UpdateUserPage() {
       if (me) {
         await update(me.uuid, user);
         refetch();
-        setMessage("Perfil atualizado com sucesso!");
-        setShowMessage(true);
+        showSuccess("Sucesso", "Perfil atualizado com sucesso!");
       }
     } catch (error) {
-      setMessage("Erro ao atualizar perfil");
-      setShowMessage(true);
+      console.error(error);
+      showError("Erro", "Erro ao atualizar perfil");
     }
   }
 
@@ -49,7 +46,6 @@ export function UpdateUserPage() {
   return (
     <div>
       <h1>Atualizar Perfil</h1>
-      {showMessage && <MessageCard title="Sucesso" message={message} />}
       <form onSubmit={handleSubmit}>
         <TextField
           type="text"
