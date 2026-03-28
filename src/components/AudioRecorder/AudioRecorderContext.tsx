@@ -55,6 +55,12 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
     setPatientState(null);
     setAudioChunks([]);
     setElapsedTime(0);
+    setStatus(Status.idle);
+    statusRef.current = Status.idle;
+    if (timeRef.current) {
+      clearInterval(timeRef.current);
+      timeRef.current = null;
+    }
   };
 
   const preferredMimeTypes = [
@@ -212,46 +218,57 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const finalizeSubmitRecordingWithChunks = async (chunks: Blob[]) => {
-    if (!patient || chunks.length === 0) return;
+    if (chunks.length === 0) return;
 
     const audioBlob = new Blob(chunks, { type: mimeType });
+    const dateStr = new Date().toISOString().split("T")[0];
+    const timeStr = new Date().toTimeString().split(" ")[0].replace(/:/g, "-");
+
+    // Capture patient data before potentially clearing it
+    const patientName = patient?.patient.first_name || "Sem-Paciente";
+    const patientUuid = patient?.uuid;
+
     // download
     const url = URL.createObjectURL(audioBlob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${patient.patient.first_name} - ${new Date().toLocaleString().split("T")[0].replace(/[:.]/g, "-")}.webm`;
+    a.download = `${patientName} - ${dateStr}_${timeStr}.webm`;
     a.click();
     URL.revokeObjectURL(url);
+
+    if (!patientUuid) {
+      alert(
+        "Atenção: Os dados do paciente não foram encontrados. A gravação foi baixada localmente como backup, mas não pôde ser enviada automaticamente ao servidor.",
+      );
+      clearPatient();
+      return;
+    }
+
     // upload
     try {
-      const session_date = new Date().toISOString().split("T")[0];
+      const session_date = dateStr;
       const { job_uuid } = await startAutomatedRecordUpload(
-        patient.uuid,
+        patientUuid,
         session_date,
       );
 
       clearPatient();
-      setStatus(Status.idle);
-      statusRef.current = Status.idle;
-      if (timeRef.current) clearInterval(timeRef.current);
 
       await uploadInChunks(job_uuid, audioBlob)
         .then(() => {
-          alert(
-            `Áudio do atendimento de ${patient.patient.first_name} enviado com sucesso!`,
-          );
+          alert(`Áudio do atendimento de ${patientName} enviado com sucesso!`);
         })
         .catch((error) => {
           console.error("Error submitting automated record:", error);
           alert(
-            `Atenção!!! \n\n Erro ao enviar o áudio do atendimento de ${patient.patient.first_name} automaticamente.`,
+            `Atenção!!! \n\n Erro ao enviar o áudio do atendimento de ${patientName} automaticamente.`,
           );
         });
 
       window.dispatchEvent(new CustomEvent("ai_record_created"));
     } catch (error) {
       console.error("Error submitting record:", error);
-      alert("Erro ao enviar áudio.");
+      alert(`Erro ao iniciar o envio do áudio para ${patientName}.`);
     } finally {
       clearPatient();
     }
