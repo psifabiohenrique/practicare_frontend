@@ -16,11 +16,7 @@ import {
   startAutomatedRecordUpload,
   uploadInChunks,
 } from "../../api/record.service";
-import {
-  showSuccess,
-  showError,
-  showWarning,
-} from "../../utils/swal";
+import { showSuccess, showError, showWarning } from "../../utils/swal";
 
 const RecordingContext = createContext<RecordingContextData | undefined>(
   undefined,
@@ -102,7 +98,7 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
       if (!mimeType) {
         showWarning(
           "Navegador não suportado",
-          "Este navegador não suporta o formato de áudio adequado, por favor utilize outro."
+          "Este navegador não suporta o formato de áudio adequado, por favor utilize outro.",
         );
         throw new Error("Nenhum mimeType de áudio suportado neste browser");
       }
@@ -245,7 +241,7 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!patientUuid) {
       showWarning(
         "Paciente não encontrado",
-        "Os dados do paciente não foram encontrados. A gravação foi baixada localmente como backup, mas não pôde ser enviada automaticamente ao servidor."
+        "Os dados do paciente não foram encontrados. A gravação foi baixada localmente como backup, mas não pôde ser enviada automaticamente ao servidor.",
       );
       clearPatient();
       return;
@@ -259,14 +255,20 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
         session_date,
       );
 
+      // UI need to be cleared as early as possible, so the user can select another patient
+      // Finish upload in chunks in background
+      clearPatient();
+
       try {
         await uploadInChunks(job_uuid, audioBlob);
-        showSuccess(`Áudio do atendimento de ${patientName} enviado com sucesso!`);
+        showSuccess(
+          `Áudio do atendimento de ${patientName} enviado com sucesso!`,
+        );
       } catch (uploadError) {
         console.error("Error submitting automated record chunks:", uploadError);
         showError(
           "Erro no envio",
-          `Erro ao enviar o áudio do atendimento de ${patientName} automaticamente.\n\nA gravação foi baixada localmente como backup.`
+          `Erro ao enviar o áudio do atendimento de ${patientName} automaticamente.\n\nA gravação foi baixada localmente como backup.`,
         );
       }
 
@@ -275,10 +277,8 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
       console.error("Error starting record upload:", startError);
       showError(
         "Erro ao iniciar envio",
-        `Erro ao iniciar o envio do áudio para ${patientName}.\n\nA gravação foi baixada localmente como backup.`
+        `Erro ao iniciar o envio do áudio para ${patientName}.\n\nA gravação foi baixada localmente como backup.`,
       );
-    } finally {
-      clearPatient();
     }
   };
 
