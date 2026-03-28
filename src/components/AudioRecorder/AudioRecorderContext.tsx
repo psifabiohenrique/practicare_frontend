@@ -16,6 +16,11 @@ import {
   startAutomatedRecordUpload,
   uploadInChunks,
 } from "../../api/record.service";
+import {
+  showSuccess,
+  showError,
+  showWarning,
+} from "../../utils/swal";
 
 const RecordingContext = createContext<RecordingContextData | undefined>(
   undefined,
@@ -95,8 +100,9 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
   const startRecording = async () => {
     try {
       if (!mimeType) {
-        alert(
-          "Este navegador não suporta o formato de áudio adequado, por favor utilize outro.",
+        showWarning(
+          "Navegador não suportado",
+          "Este navegador não suporta o formato de áudio adequado, por favor utilize outro."
         );
         throw new Error("Nenhum mimeType de áudio suportado neste browser");
       }
@@ -237,8 +243,9 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
     URL.revokeObjectURL(url);
 
     if (!patientUuid) {
-      alert(
-        "Atenção: Os dados do paciente não foram encontrados. A gravação foi baixada localmente como backup, mas não pôde ser enviada automaticamente ao servidor.",
+      showWarning(
+        "Paciente não encontrado",
+        "Os dados do paciente não foram encontrados. A gravação foi baixada localmente como backup, mas não pôde ser enviada automaticamente ao servidor."
       );
       clearPatient();
       return;
@@ -254,19 +261,21 @@ export const RecordingProvider: React.FC<{ children: React.ReactNode }> = ({
 
       try {
         await uploadInChunks(job_uuid, audioBlob);
-        alert(`Áudio do atendimento de ${patientName} enviado com sucesso!`);
+        showSuccess(`Áudio do atendimento de ${patientName} enviado com sucesso!`);
       } catch (uploadError) {
         console.error("Error submitting automated record chunks:", uploadError);
-        alert(
-          `Atenção!!! \n\n Erro ao enviar o áudio do atendimento de ${patientName} automaticamente.\n\nA gravação foi baixada localmente como backup.`,
+        showError(
+          "Erro no envio",
+          `Erro ao enviar o áudio do atendimento de ${patientName} automaticamente.\n\nA gravação foi baixada localmente como backup.`
         );
       }
 
       window.dispatchEvent(new CustomEvent("ai_record_created"));
     } catch (startError) {
       console.error("Error starting record upload:", startError);
-      alert(
-        `Erro ao iniciar o envio do áudio para ${patientName}.\n\nA gravação foi baixada localmente como backup.`,
+      showError(
+        "Erro ao iniciar envio",
+        `Erro ao iniciar o envio do áudio para ${patientName}.\n\nA gravação foi baixada localmente como backup.`
       );
     } finally {
       clearPatient();

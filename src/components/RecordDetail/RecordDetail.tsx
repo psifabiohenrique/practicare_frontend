@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getRecord } from "../../api/record.service";
 import type { Record } from "../../types/record";
 import { formatDate, formatTime } from "../../utils/formatters";
+import { showToast } from "../../utils/swal";
 import styles from "./RecordDetail.module.css";
 
 interface RecordDetailProps {
@@ -35,7 +36,7 @@ export function RecordDetail({ recordUuid }: RecordDetailProps) {
       navigator.clipboard.writeText(
         `${formatDate(record.date)}\n\n${record.content}`,
       );
-      alert("Conteúdo copiado para a área de transferência!");
+      showToast("Conteúdo copiado!");
     }
   };
 

@@ -10,6 +10,7 @@ import TextField from "../TextField/TextField";
 import { TextArea } from "../TextArea/TextArea";
 import Button from "../Button/Button";
 import { MessageCard } from "../MessageCard/MessageCard";
+import { showConfirm } from "../../utils/swal";
 import type {
   ReportPayload,
   ReportUpdatePayload,
@@ -71,8 +72,9 @@ export function ReportForm({
   const handleAiSubmit = async () => {
     if (treatmentUuid) {
       if (
-        confirm(
-          "Você confirma a geração de um novo relatório para o período descrito?",
+        await showConfirm(
+          "Gerar relatório",
+          "Você confirma a geração de um novo relatório para o período descrito?"
         )
       ) {
         try {

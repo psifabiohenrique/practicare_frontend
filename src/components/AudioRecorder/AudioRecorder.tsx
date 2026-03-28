@@ -2,6 +2,7 @@ import styles from "./audioRecorder.module.css";
 import { Status } from "../../types/audioRecorderStatus";
 import Button from "../Button/Button";
 import { useRecording } from "./AudioRecorderContext";
+import { showConfirm } from "../../utils/swal";
 
 export default function AudioRecorder() {
   const recording = useRecording();
@@ -40,8 +41,8 @@ export default function AudioRecorder() {
     console.log(`Handle pause Recording: ${status}`);
   };
 
-  const handleCancelRecording = () => {
-    if (window.confirm("Tem certeza que deseja cancelar a gravação?")) {
+  const handleCancelRecording = async () => {
+    if (await showConfirm("Cancelar gravação", "Tem certeza que deseja cancelar a gravação?")) {
       console.log(`Handle Cancel Recording: ${status}`);
 
       cancelRecording();
@@ -49,9 +50,9 @@ export default function AudioRecorder() {
     }
   };
 
-  const handleFinalizeRecording = () => {
+  const handleFinalizeRecording = async () => {
     if (
-      window.confirm("Tem certeza que deseja finalizar e enviar a gravação?")
+      await showConfirm("Finalizar e enviar", "Tem certeza que deseja finalizar e enviar a gravação?")
     ) {
       pendingFinalizeRef.current = true;
       stopRecording();

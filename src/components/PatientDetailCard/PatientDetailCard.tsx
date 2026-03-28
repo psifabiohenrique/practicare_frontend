@@ -13,6 +13,7 @@ import type { ModalType } from "../../pages/Dashboard/patients/PatientDetailPage
 import { useEffect, useState } from "react";
 import { deletePatient, getPatient } from "../../api/patient.service";
 import { useRecording } from "../AudioRecorder/AudioRecorderContext";
+import { showConfirm, showSuccess } from "../../utils/swal";
 
 interface PatientDetailCardProps {
   uuid: string;
@@ -52,11 +53,19 @@ export function PatientDetailCard({
   }
 
   async function handleDeletePatient(uuid: string) {
-    if (confirm(`Tem certeza que deseja ${patient?.status === 'Active' ? 'encerrar' : 'ativar'} este tratamento?`)) {
+    const action = patient?.status === "Active" ? "encerrar" : "ativar";
+    if (
+      await showConfirm(
+        `${action.charAt(0).toUpperCase() + action.slice(1)} tratamento`,
+        `Tem certeza que deseja ${action} este tratamento?`
+      )
+    ) {
       const result = await deletePatient(uuid);
 
       if (result) {
-        alert(`Tratamento ${patient?.status === 'Active' ? 'encerrado' : 'ativado'} com sucesso!`);
+        showSuccess(
+          `Tratamento ${patient?.status === "Active" ? "encerrado" : "ativado"} com sucesso!`
+        );
         setPatient(result);
       }
     }
