@@ -32,8 +32,21 @@
 
 .section h3 {
   font-size: var(--font-size-base);
-  margin-bottom: var(--space-xs);
+  margin: 0;
   color: var(--color-text-primary);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xs);
+}
+
+.copyAllContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin: var(--space-md) 0;
 }
 
 .content {

@@ -42,23 +42,6 @@
   margin-bottom: var(--space-sm);
 }
 
-.copyButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--space-xs);
-  color: var(--color-text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-sm);
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-.copyButton:hover {
-  color: var(--color-primary);
-  background-color: var(--color-bg-surface);
-}
 
 .content {
   white-space: pre-wrap;
