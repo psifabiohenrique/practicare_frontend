@@ -11,6 +11,16 @@
   z-index: 5;
 }
 
+.logoLink {
+  text-decoration: none;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
 .navList {
   list-style: none;
   display: flex;

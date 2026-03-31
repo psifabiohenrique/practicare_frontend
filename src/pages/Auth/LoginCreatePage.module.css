@@ -5,3 +5,8 @@
   justify-content: center;
   min-width: 360px;
 }
+
+.loginLogo {
+  margin-bottom: 1.5rem;
+  transform: scale(1.1);
+}

@@ -5,6 +5,7 @@ import Button from "../../components/Button/Button";
 import Form from "../../components/Form/Form";
 import { Link, useNavigate } from "react-router-dom";
 import { showSuccess, showError } from "../../utils/swal";
+import Logo from "../../components/Logo/Logo";
 import styles from "./LoginCreatePage.module.css";
 
 export function LoginPage() {
@@ -27,6 +28,7 @@ export function LoginPage() {
 
   return (
     <div className={styles.loginContainer}>
+      <Logo className={styles.loginLogo} />
       <h1>Login</h1>
       <Form onSubmit={handleSubmit}>
         <TextField
