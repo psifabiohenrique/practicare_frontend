@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { PatientDetailCard } from "../../../components/PatientDetailCard/PatientDetailCard";
+import { TreatmentContextCard } from "../../../components/TreatmentContextCard/TreatmentContextCard";
 import { RecordList } from "../../../components/RecordList/RecordList";
 import { Modal } from "../../../components/Modal/Modal";
 import { RecordDetail } from "../../../components/RecordDetail/RecordDetail";
@@ -30,6 +31,7 @@ export function PatientDetailPage() {
   const [refreshRecordsKey, setRefreshRecordsKey] = useState(0);
   const [refreshReportsKey, setRefreshReportsKey] = useState(0);
   const [refreshPatientKey, setRefreshPatientKey] = useState(0);
+  const [refreshContextKey, setRefreshContextKey] = useState(0);
   const [prevUuid, setPrevUuid] = useState(uuid);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -53,6 +55,7 @@ export function PatientDetailPage() {
   useEffect(() => {
     const handleAiRecordCreated = () => {
       setRefreshRecordsKey((prev) => prev + 1);
+      setRefreshContextKey((prev) => prev + 1);
     };
     window.addEventListener("ai_record_created", handleAiRecordCreated);
     return () => {
@@ -145,6 +148,10 @@ export function PatientDetailPage() {
         uuid={uuid!}
         onOpenModal={handleOpenModal}
         refreshKey={refreshPatientKey}
+      />
+      <TreatmentContextCard
+        treatmentId={uuid!}
+        refreshKey={refreshContextKey}
       />
       <RecordList
         treatmentId={uuid!}

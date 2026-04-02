@@ -1,0 +1,78 @@
+.card {
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-bg-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-sm);
+}
+
+.section h3 {
+  margin: 0;
+  font-size: var(--font-size-base);
+  color: var(--color-primary);
+}
+
+.contentRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.draftBox {
+  border: 1px solid var(--color-warning);
+  border-left: 4px solid var(--color-warning);
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  background-color: rgba(202, 138, 4, 0.05);
+}
+
+.draftLabel {
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  color: var(--color-warning);
+  margin-bottom: var(--space-xs);
+  display: block;
+}
+
+.emptyState {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.editorContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.buttons {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+}
