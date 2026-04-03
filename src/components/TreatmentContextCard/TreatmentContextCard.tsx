@@ -116,7 +116,7 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
   if (isLoading) return <div>Carregando contexto...</div>;
 
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${isEditing ? styles.cardEditing : ""}`}>
       <div className={styles.header}>
         <h2>Contexto Clínico</h2>
         {hasDraft && !isEditing && (
