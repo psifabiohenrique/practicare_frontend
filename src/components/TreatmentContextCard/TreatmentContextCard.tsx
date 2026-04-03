@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import styles from "./TreatmentContextCard.module.css";
 import Button from "../Button/Button";
 import { TextArea } from "../TextArea/TextArea";
+import ReactMarkdown from "react-markdown";
 import { showSuccess, showError, showConfirm } from "../../utils/swal";
 import {
   getContextWithDraft,
@@ -137,7 +138,9 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
                 <h3>{f.label}</h3>
                 <div className={styles.contentRow}>
                   {contextVal ? (
-                    <p>{contextVal}</p>
+                    <div className={styles.markdownContent}>
+                      <ReactMarkdown>{contextVal}</ReactMarkdown>
+                    </div>
                   ) : (
                     <p className={styles.emptyState}>Não definido.</p>
                   )}
@@ -145,7 +148,9 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
                   {hasDraftChange && (
                     <div className={styles.draftBox}>
                       <span className={styles.draftLabel}>Sugestão IA:</span>
-                      <p>{draftVal}</p>
+                      <div className={styles.markdownContent}>
+                        <ReactMarkdown>{draftVal}</ReactMarkdown>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -172,7 +177,9 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
                 {showDraftSuggestion && (
                   <div className={styles.draftBox}>
                     <span className={styles.draftLabel}>Mudanças Propostas pela IA:</span>
-                    <p>{draftChange}</p>
+                    <div className={styles.markdownContent}>
+                      <ReactMarkdown>{draftChange}</ReactMarkdown>
+                    </div>
                   </div>
                 )}
                 <TextArea

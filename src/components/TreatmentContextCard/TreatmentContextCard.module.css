@@ -80,3 +80,29 @@
   gap: var(--space-sm);
   justify-content: flex-end;
 }
+.markdownContent {
+  color: var(--color-text-primary);
+  line-height: 1.6;
+}
+
+.markdownContent p {
+  margin: 0 0 1rem 0;
+}
+
+.markdownContent p:last-child {
+  margin-bottom: 0;
+}
+
+.markdownContent ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.markdownContent li {
+  margin-bottom: 0.25rem;
+}
+
+.markdownContent li:last-child {
+  margin-bottom: 0;
+}
