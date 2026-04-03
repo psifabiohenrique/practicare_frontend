@@ -61,12 +61,7 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
   const startReviewOrEdit = () => {
     const initialValues: TreatmentContextUpdatePayload = {};
     for (const field of FIELDS) {
-      if (hasDraft) {
-        initialValues[field.key] =
-          data.pending_draft![field.key] || data.context?.[field.key] || "";
-      } else {
-        initialValues[field.key] = data?.context?.[field.key] || "";
-      }
+      initialValues[field.key] = data?.context?.[field.key] || "";
     }
     setEditValues(initialValues);
     setIsEditing(true);
@@ -168,16 +163,27 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
         </div>
       ) : (
         <div className={styles.editorContainer}>
-          {FIELDS.map((f) => (
-            <div key={f.key} className={styles.section}>
-              <TextArea
-                label={f.label}
-                value={editValues[f.key] || ""}
-                onChange={(e) => handleChange(f.key, e.target.value)}
-                rows={5}
-              />
-            </div>
-          ))}
+          {FIELDS.map((f) => {
+            const draftChange = data?.pending_draft?.[f.key];
+            const showDraftSuggestion = hasDraft && draftChange;
+            
+            return (
+              <div key={f.key} className={styles.section}>
+                {showDraftSuggestion && (
+                  <div className={styles.draftBox}>
+                    <span className={styles.draftLabel}>Mudanças Propostas pela IA:</span>
+                    <p>{draftChange}</p>
+                  </div>
+                )}
+                <TextArea
+                  label={f.label}
+                  value={editValues[f.key] || ""}
+                  onChange={(e) => handleChange(f.key, e.target.value)}
+                  rows={5}
+                />
+              </div>
+            );
+          })}
 
           <div className={styles.buttons}>
             <Button onClick={handleCancelEdit} style={{ backgroundColor: "var(--color-text-secondary)" }}>
