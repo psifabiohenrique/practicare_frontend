@@ -54,9 +54,18 @@ export function ReportDetail({ reportUuid }: ReportDetailProps) {
     <div className={styles.container}>
       <div className={styles.header}>
         <span className={styles.title}>Relatório de Atendimento</span>
-        <span className={styles.date}>
-          Emissão: {formatDate(report.issue_date)}
-        </span>
+        <div className={styles.headerMeta}>
+          <span className={styles.typeBadge} data-type={report.report_type ?? "PERIODICO"}>
+            {report.report_type === "COMPLETO"
+              ? "Completo"
+              : report.report_type === "FOCADO"
+                ? "Focado"
+                : "Periódico"}
+          </span>
+          <span className={styles.date}>
+            Emissão: {formatDate(report.issue_date)}
+          </span>
+        </div>
       </div>
 
       <div className={styles.periodRange}>

@@ -21,6 +21,12 @@
   gap: var(--space-xs);
 }
 
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
 .reportTitle {
   font-weight: 600;
   color: var(--color-primary);
@@ -32,6 +38,32 @@
   color: var(--color-text-secondary);
 }
 
+/* ── Type Badges ── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: var(--font-size-xs, 0.7rem);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.badgePERIODICO {
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  color: var(--color-primary);
+}
+
+.badgeCOMPLETO {
+  background: color-mix(in srgb, #22c55e 15%, transparent);
+  color: #16a34a;
+}
+
+.badgeFOCADO {
+  background: color-mix(in srgb, #a855f7 15%, transparent);
+  color: #9333ea;
+}
+
+/* ── Action Buttons ── */
 .actions {
   display: flex;
   gap: var(--space-sm);
@@ -53,4 +85,17 @@
 .editButton {
   padding: var(--space-xs) var(--space-sm);
   font-size: var(--font-size-sm);
+}
+
+.deleteButton {
+  background-color: transparent;
+  color: var(--color-error, #ef4444);
+  border: 1px solid var(--color-error, #ef4444);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+}
+
+.deleteButton:hover {
+  background-color: var(--color-error, #ef4444);
+  color: white;
 }

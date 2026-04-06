@@ -1,3 +1,5 @@
+export type ReportType = "COMPLETO" | "PERIODICO" | "FOCADO";
+
 export interface Report {
   uuid: string;
   treatment_uuid: string;
@@ -8,6 +10,9 @@ export interface Report {
   issue_date: string;
   start_date_period: string;
   end_date_period: string;
+  status: string;
+  report_type: ReportType;
+  system_prompt?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -22,12 +27,17 @@ export type ReportPayload = Pick<
   | "issue_date"
   | "start_date_period"
   | "end_date_period"
->;
+> & {
+  report_type?: ReportType;
+  system_prompt?: string | null;
+};
 
-export type ReportWithAiPayload = Pick<
-  Report,
-  "treatment_uuid" | "issue_date" | "start_date_period" | "end_date_period"
->;
+export interface ReportWithAiPayload {
+  report_type: ReportType;
+  start_date_period?: string | null;
+  end_date_period?: string | null;
+  system_prompt?: string | null;
+}
 
 export type ReportUpdatePayload = Partial<
   Omit<ReportPayload, "treatment_uuid" | "created_at" | "updated_at">

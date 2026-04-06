@@ -49,3 +49,7 @@ export async function createReportWithAi(
   );
   return response.data;
 }
+
+export async function deleteReport(report_uuid: string): Promise<void> {
+  await api.delete(`/treatment-reports/${report_uuid}`);
+}
