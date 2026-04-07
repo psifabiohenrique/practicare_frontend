@@ -5,9 +5,10 @@ export interface Record {
   start_time: string;
   end_time: string;
   content: string;
-  record_number: number;
+  record_number: number | null;
   created_at: string;
   updated_at: string;
+  is_active: boolean;
 }
 
 export type RecordPayload = Pick<
@@ -22,4 +23,5 @@ export type RecordUpdatePayload = Partial<
 export type RecordListParams = {
   skip?: number;
   limit?: number;
+  include_archived?: boolean;
 };

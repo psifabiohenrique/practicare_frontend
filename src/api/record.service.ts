@@ -38,6 +38,10 @@ export async function updateRecord(
   return response.data;
 }
 
+export async function deleteRecord(record_uuid: string): Promise<void> {
+  await api.delete(`/treatment-records/${record_uuid}`);
+}
+
 export async function startAutomatedRecordUpload(
   treatment_uuid: string,
   session_date: string,

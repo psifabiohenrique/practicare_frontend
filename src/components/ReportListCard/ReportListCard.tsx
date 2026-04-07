@@ -23,21 +23,21 @@ export function ReportListCard({
   onOpenModal,
   onDeleted,
 }: ReportListCardProps) {
-  const handleDelete = async () => {
+  const handleArchive = async () => {
     const confirmed = await showConfirm(
-      "Excluir relatório",
-      "Esta ação não pode ser desfeita. Deseja continuar?",
-      "Excluir",
+      "Arquivar relatório",
+      "Esta ação arquivará o relatório. Deseja continuar?",
+      "Arquivar",
       "Cancelar",
     );
     if (!confirmed) return;
 
     try {
       await deleteReport(report.uuid);
-      showToast("Relatório excluído com sucesso!");
+      showToast("Relatório arquivado com sucesso!");
       onDeleted();
     } catch {
-      showError("Erro", "Não foi possível excluir o relatório.");
+      showError("Erro", "Não foi possível arquivar o relatório.");
     }
   };
 
@@ -45,10 +45,10 @@ export function ReportListCard({
   const typeLabel = TYPE_LABELS[reportType] ?? reportType;
 
   return (
-    <div className={styles.reportListCardContainer}>
+    <div className={styles.reportListCardContainer} style={{ opacity: report.is_active ? 1 : 0.6 }}>
       <div className={styles.info}>
         <div className={styles.titleRow}>
-          <span className={styles.reportTitle}>Relatório</span>
+          <span className={styles.reportTitle}>Relatório {!report.is_active && "[Arquivado]"}</span>
           <span
             className={`${styles.badge} ${styles[`badge${reportType}`]}`}
           >
@@ -66,15 +66,19 @@ export function ReportListCard({
         >
           Visualizar
         </Button>
-        <Button
-          className={styles.editButton}
-          onClick={() => onOpenModal("report_form", report.uuid)}
-        >
-          Editar
-        </Button>
-        <Button className={styles.deleteButton} onClick={handleDelete}>
-          Excluir
-        </Button>
+        {report.is_active && (
+          <>
+            <Button
+              className={styles.editButton}
+              onClick={() => onOpenModal("report_form", report.uuid)}
+            >
+              Editar
+            </Button>
+            <Button className={styles.deleteButton} onClick={handleArchive}>
+              Arquivar
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

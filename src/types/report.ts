@@ -15,6 +15,7 @@ export interface Report {
   system_prompt?: string | null;
   created_at: string;
   updated_at: string;
+  is_active: boolean;
 }
 
 export type ReportPayload = Pick<
@@ -46,4 +47,5 @@ export type ReportUpdatePayload = Partial<
 export type ReportListParams = {
   skip?: number;
   limit?: number;
+  include_archived?: boolean;
 };

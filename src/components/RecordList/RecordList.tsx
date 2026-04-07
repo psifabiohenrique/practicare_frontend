@@ -18,7 +18,7 @@ export function RecordList({
   refreshKey,
 }: RecordListProps) {
   const [records, setRecords] = useState<Record[]>([]);
-  const [params, setParams] = useState({ skip: 0, limit: 4 });
+  const [params, setParams] = useState({ skip: 0, limit: 4, include_archived: false });
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchRecords = useCallback(async () => {
@@ -44,12 +44,22 @@ export function RecordList({
       </header>
 
       <div className={styles.button}>
-      <Button
-        onClick={() => onOpenModal("record_form")}
-        style={{ width: "200px" }}
-      >
-        Adicionar Registro
-      </Button>
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <input 
+              type="checkbox" 
+              checked={params.include_archived}
+              onChange={(e) => setParams({ ...params, include_archived: e.target.checked, skip: 0 })}
+            />
+            Exibir Arquivados
+          </label>
+          <Button
+            onClick={() => onOpenModal("record_form")}
+            style={{ width: "200px" }}
+          >
+            Adicionar Registro
+          </Button>
+        </div>
       </div>
       <div className={styles.recordsGrid}>
         {isLoading ? (
@@ -60,6 +70,7 @@ export function RecordList({
               key={record.uuid}
               record={record}
               onOpenModal={onOpenModal}
+              onDeleted={fetchRecords}
             />
           ))
         ) : (

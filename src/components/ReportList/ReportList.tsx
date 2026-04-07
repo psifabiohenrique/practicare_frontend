@@ -18,7 +18,7 @@ export function ReportList({
   refreshKey,
 }: ReportListProps) {
   const [reports, setReports] = useState<Report[]>([]);
-  const [params, setParams] = useState({ skip: 0, limit: 4 });
+  const [params, setParams] = useState({ skip: 0, limit: 4, include_archived: false });
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchReports = useCallback(async () => {
@@ -43,13 +43,23 @@ export function ReportList({
         <h1>Relatórios</h1>
       </header>
       <div className={styles.button}>
-        <Button
-          onClick={() => onOpenModal("report_form")}
-          style={{ width: "200px" }}
-          disabled={isLoading}
-        >
-          Novo Relatório
-        </Button>
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <input 
+              type="checkbox" 
+              checked={params.include_archived}
+              onChange={(e) => setParams({ ...params, include_archived: e.target.checked, skip: 0 })}
+            />
+            Exibir Arquivados
+          </label>
+          <Button
+            onClick={() => onOpenModal("report_form")}
+            style={{ width: "200px" }}
+            disabled={isLoading}
+          >
+            Novo Relatório
+          </Button>
+        </div>
       </div>
 
       <div className={styles.reportsGrid}>
