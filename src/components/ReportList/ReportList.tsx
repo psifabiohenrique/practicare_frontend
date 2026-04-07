@@ -71,7 +71,6 @@ export function ReportList({
               key={report.uuid}
               report={report}
               onOpenModal={onOpenModal}
-              onDeleted={fetchReports}
             />
           ))
         ) : (

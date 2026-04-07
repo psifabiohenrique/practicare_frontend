@@ -92,7 +92,12 @@ export function PatientDetailPage() {
   const renderModalContent = () => {
     switch (modalState.type) {
       case "record_detail":
-        return <RecordDetail recordUuid={modalState.uuid!} />;
+        return (
+          <RecordDetail
+            recordUuid={modalState.uuid!}
+            onArchive={handleRecordSuccess}
+          />
+        );
       case "record_form":
         return (
           <RecordForm
@@ -102,7 +107,12 @@ export function PatientDetailPage() {
           />
         );
       case "report_detail":
-        return <ReportDetail reportUuid={modalState.uuid!} />;
+        return (
+          <ReportDetail
+            reportUuid={modalState.uuid!}
+            onArchive={handleReportSuccess}
+          />
+        );
       case "report_form":
         return (
           <ReportForm

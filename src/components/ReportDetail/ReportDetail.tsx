@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
-import { getReport } from "../../api/report.service";
+import { getReport, deleteReport } from "../../api/report.service";
 import type { Report } from "../../types/report";
 import { formatDate, formatTime } from "../../utils/formatters";
 import { CopyButton } from "../CopyButton/CopyButton";
 import Button from "../Button/Button";
-import { showToast } from "../../utils/swal";
+import { showConfirm, showError, showToast } from "../../utils/swal";
 import styles from "./ReportDetail.module.css";
 
 interface ReportDetailProps {
   reportUuid: string;
+  onArchive?: () => void;
 }
 
-export function ReportDetail({ reportUuid }: ReportDetailProps) {
+export function ReportDetail({ reportUuid, onArchive }: ReportDetailProps) {
   const [report, setReport] = useState<Report | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +33,7 @@ export function ReportDetail({ reportUuid }: ReportDetailProps) {
 
     fetchReport();
   }, [reportUuid]);
+
   const handleCopyAll = () => {
     if (report) {
       const allContent = [
@@ -42,6 +44,24 @@ export function ReportDetail({ reportUuid }: ReportDetailProps) {
       ].join("\n\n");
       navigator.clipboard.writeText(allContent);
       showToast("Relatório completo copiado!");
+    }
+  };
+
+  const handleArchive = async () => {
+    const confirmed = await showConfirm(
+      "Arquivar relatório",
+      "Esta ação arquivará o relatório. Deseja continuar?",
+      "Arquivar",
+      "Cancelar",
+    );
+    if (!confirmed) return;
+
+    try {
+      await deleteReport(reportUuid);
+      showToast("Relatório arquivado com sucesso!");
+      if (onArchive) onArchive();
+    } catch {
+      showError("Erro", "Não foi possível arquivar o relatório.");
     }
   };
 
@@ -119,6 +139,17 @@ export function ReportDetail({ reportUuid }: ReportDetailProps) {
           </span>
         )}
       </div>
+
+      {report.is_active && (
+        <div className={styles.archiveSection}>
+          <Button
+            className={styles.archiveButton}
+            onClick={handleArchive}
+          >
+            Arquivar Relatório
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

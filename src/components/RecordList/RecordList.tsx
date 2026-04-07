@@ -70,7 +70,6 @@ export function RecordList({
               key={record.uuid}
               record={record}
               onOpenModal={onOpenModal}
-              onDeleted={fetchRecords}
             />
           ))
         ) : (

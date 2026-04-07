@@ -2,14 +2,11 @@ import { type Report } from "../../types/report";
 import { formatDate } from "../../utils/formatters";
 import type { ModalType } from "../../pages/Dashboard/patients/PatientDetailPage";
 import Button from "../Button/Button";
-import { deleteReport } from "../../api/report.service";
-import { showConfirm, showError, showToast } from "../../utils/swal";
 import styles from "./ReportListCard.module.css";
 
 interface ReportListCardProps {
   report: Report;
   onOpenModal: (type: ModalType, uuid?: string) => void;
-  onDeleted: () => void;
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -21,26 +18,7 @@ const TYPE_LABELS: Record<string, string> = {
 export function ReportListCard({
   report,
   onOpenModal,
-  onDeleted,
 }: ReportListCardProps) {
-  const handleArchive = async () => {
-    const confirmed = await showConfirm(
-      "Arquivar relatório",
-      "Esta ação arquivará o relatório. Deseja continuar?",
-      "Arquivar",
-      "Cancelar",
-    );
-    if (!confirmed) return;
-
-    try {
-      await deleteReport(report.uuid);
-      showToast("Relatório arquivado com sucesso!");
-      onDeleted();
-    } catch {
-      showError("Erro", "Não foi possível arquivar o relatório.");
-    }
-  };
-
   const reportType = report.report_type ?? "PERIODICO";
   const typeLabel = TYPE_LABELS[reportType] ?? reportType;
 
@@ -67,17 +45,12 @@ export function ReportListCard({
           Visualizar
         </Button>
         {report.is_active && (
-          <>
-            <Button
-              className={styles.editButton}
-              onClick={() => onOpenModal("report_form", report.uuid)}
-            >
-              Editar
-            </Button>
-            <Button className={styles.deleteButton} onClick={handleArchive}>
-              Arquivar
-            </Button>
-          </>
+          <Button
+            className={styles.editButton}
+            onClick={() => onOpenModal("report_form", report.uuid)}
+          >
+            Editar
+          </Button>
         )}
       </div>
     </div>

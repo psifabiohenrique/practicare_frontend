@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import { getRecord } from "../../api/record.service";
-import type { Record } from "../../types/record";
+import { getRecord, deleteRecord } from "../../api/record.service";
+import type { Record as RecordType } from "../../types/record";
 import { formatDate, formatTime } from "../../utils/formatters";
 import { CopyButton } from "../CopyButton/CopyButton";
+import Button from "../Button/Button";
+import { showConfirm, showError, showToast } from "../../utils/swal";
 import styles from "./RecordDetail.module.css";
 
 interface RecordDetailProps {
   recordUuid: string;
+  onArchive?: () => void;
 }
 
-export function RecordDetail({ recordUuid }: RecordDetailProps) {
-  const [record, setRecord] = useState<Record | null>(null);
+export function RecordDetail({ recordUuid, onArchive }: RecordDetailProps) {
+  const [record, setRecord] = useState<RecordType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,6 +33,24 @@ export function RecordDetail({ recordUuid }: RecordDetailProps) {
 
     fetchRecord();
   }, [recordUuid]);
+
+  const handleArchive = async () => {
+    const confirmed = await showConfirm(
+      "Arquivar prontuário",
+      "Esta ação arquivará o prontuário. Deseja continuar?",
+      "Arquivar",
+      "Cancelar",
+    );
+    if (!confirmed) return;
+
+    try {
+      await deleteRecord(recordUuid);
+      showToast("Prontuário arquivado com sucesso!");
+      if (onArchive) onArchive();
+    } catch {
+      showError("Erro", "Não foi possível arquivar o prontuário.");
+    }
+  };
 
 
   if (isLoading) return <div className={styles.loading}>Carregando...</div>;
@@ -73,6 +94,17 @@ export function RecordDetail({ recordUuid }: RecordDetailProps) {
           </span>
         )}
       </div>
+
+      {record.is_active && (
+        <div className={styles.archiveSection}>
+          <Button
+            className={styles.archiveButton}
+            onClick={handleArchive}
+          >
+            Arquivar Prontuário
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
