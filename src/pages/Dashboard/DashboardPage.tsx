@@ -3,6 +3,9 @@ import { useUser } from "../../hooks/useUser";
 import { useDashboard } from "../../hooks/useDashboard";
 import StatCard from "../../components/StatCard/StatCard";
 import DateRangeFilter from "../../components/DateRangeFilter/DateRangeFilter";
+import Button from "../../components/Button/Button";
+import { downloadBackup } from "../../api/export.service";
+import { showError, showSuccess } from "../../utils/swal";
 import type { DashboardParams } from "../../types/dashboard";
 import styles from "./DashboardPage.module.css";
 
@@ -59,6 +62,7 @@ export function DashboardPage() {
     start_date: defaults.start,
     end_date: defaults.end,
   });
+  const [isExporting, setIsExporting] = useState(false);
 
   const { data: stats, isLoading: statsLoading, error } = useDashboard(params);
 
@@ -71,6 +75,26 @@ export function DashboardPage() {
 
   const handleApplyFilter = (startDate: string, endDate: string) => {
     setParams({ start_date: startDate, end_date: endDate });
+  };
+
+  const handleExportBackup = async () => {
+    setIsExporting(true);
+    try {
+      const blob = await downloadBackup();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `backup_prontuarios_${new Date().toISOString().split("T")[0]}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      showSuccess("Backup gerado com sucesso!");
+    } catch (err) {
+      showError("Erro ao gerar backup. Tente novamente mais tarde.");
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   if (userLoading) {
@@ -94,13 +118,16 @@ export function DashboardPage() {
         </p>
       </div>
 
-      <div className={styles.filterSection}>
+      <div className={styles.filterSection} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <DateRangeFilter
           initialStartDate={params.start_date ?? defaults.start}
           initialEndDate={params.end_date ?? defaults.end}
           onApply={handleApplyFilter}
           isLoading={statsLoading}
         />
+        <Button onClick={handleExportBackup} disabled={isExporting}>
+          {isExporting ? "Gerando Backup..." : "Solicitar Backup (.zip)"}
+        </Button>
       </div>
 
       {statsLoading ? (

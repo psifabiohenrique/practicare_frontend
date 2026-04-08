@@ -1,5 +1,16 @@
 import { api } from "./axios";
-import { type TreatmentContext, type TreatmentContextWithDraft, type TreatmentContextUpdatePayload } from "../types/treatmentContext";
+import { type TreatmentContext, type TreatmentContextWithDraft, type TreatmentContextUpdatePayload, type TreatmentContextGeneratePayload } from "../types/treatmentContext";
+
+export async function generateContext(
+  treatmentUuid: string,
+  payload: TreatmentContextGeneratePayload,
+): Promise<TreatmentContext> {
+  const response = await api.post(
+    `/treatment-contexts/treatment/${treatmentUuid}/generate`,
+    payload,
+  );
+  return response.data;
+}
 
 export async function getContextWithDraft(
   treatmentUuid: string,

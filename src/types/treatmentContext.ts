@@ -6,6 +6,7 @@ export interface TreatmentContext {
   psychological_patterns: string | null;
   therapeutic_goals: string | null;
   medication_notes: string | null;
+  is_update_scheduled: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -34,4 +35,9 @@ export interface TreatmentContextUpdatePayload {
   psychological_patterns?: string | null;
   therapeutic_goals?: string | null;
   medication_notes?: string | null;
+}
+
+export interface TreatmentContextGeneratePayload {
+  historical_notes?: string | null;
+  include_existing_records: boolean;
 }

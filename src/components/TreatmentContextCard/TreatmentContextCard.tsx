@@ -9,11 +9,14 @@ import {
   applyDraft,
   rejectDraft,
   updateContext,
+  generateContext,
 } from "../../api/treatmentContext.service";
 import type {
   TreatmentContextWithDraft,
   TreatmentContextUpdatePayload,
+  TreatmentContextGeneratePayload,
 } from "../../types/treatmentContext";
+import { Modal } from "../Modal/Modal";
 
 interface Props {
   treatmentId: string;
@@ -40,6 +43,11 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editValues, setEditValues] = useState<TreatmentContextUpdatePayload>({});
+
+  const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
+  const [generateNotes, setGenerateNotes] = useState("");
+  const [includeExisting, setIncludeExisting] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -114,15 +122,52 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
     setEditValues((prev) => ({ ...prev, [key]: value }));
   };
 
+  const openGenerateModal = () => {
+    setGenerateNotes("");
+    setIncludeExisting(false);
+    setIsGenerateModalOpen(true);
+  };
+
+  const handleGenerateContext = async () => {
+    const confirm = await showConfirm(
+      "Atenção: Sobrescrita de Contexto",
+      "O contexto atual será substituído por um novo. Deseja prosseguir?"
+    );
+    if (!confirm) return;
+
+    setIsGenerating(true);
+    try {
+      const payload: TreatmentContextGeneratePayload = {
+        historical_notes: generateNotes || null,
+        include_existing_records: includeExisting,
+      };
+      await generateContext(treatmentId, payload);
+      showSuccess("Geração solicitada! A IA irá reescrever seu contexto em background e ele estará disponível como um draft em alguns minutos.");
+      setIsGenerateModalOpen(false);
+      fetchData();
+    } catch (err) {
+      showError("Erro ao solicitar geração de contexto.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   if (isLoading) return <div>Carregando contexto...</div>;
 
   return (
     <div className={`${styles.card} ${isEditing ? styles.cardEditing : ""}`}>
       <div className={styles.header}>
         <h2>Contexto Clínico</h2>
-        {hasDraft && !isEditing && (
-          <span className={styles.badge}>Nova sugestão da IA pendente</span>
-        )}
+        <div className={styles.headerRight}>
+          {hasDraft && !isEditing && (
+            <span className={styles.badge}>Nova sugestão da IA pendente</span>
+          )}
+          {data?.context?.is_update_scheduled && (
+            <span className={styles.badge} style={{ backgroundColor: "var(--color-primary)" }}>
+              Gerando contexto (IA)...
+            </span>
+          )}
+        </div>
       </div>
 
       {!isEditing ? (
@@ -164,6 +209,13 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
             ) : (
               <Button onClick={startReviewOrEdit}>Editar Contexto</Button>
             )}
+            <Button
+              onClick={openGenerateModal}
+              style={{ backgroundColor: "var(--color-secondary)" }}
+              disabled={data?.context?.is_update_scheduled}
+            >
+              Re-gerar c/ IA
+            </Button>
           </div>
         </div>
       ) : (
@@ -209,6 +261,49 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
           </div>
         </div>
       )}
+
+      {/* Modal de Re-gerar Contexto */}
+      <Modal
+        isOpen={isGenerateModalOpen}
+        onClose={() => !isGenerating && setIsGenerateModalOpen(false)}
+        title="Re-gerar Contexto com a IA"
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)" }}>
+            A inteligência artificial irá reescrever seu contexto completamente com base no material fornecido.
+          </p>
+          <TextArea
+            label="Histórico de anotações prévias (Opcional)"
+            value={generateNotes}
+            onChange={(e) => setGenerateNotes(e.target.value)}
+            rows={8}
+            placeholder="Cole aqui anotações ou evoluções de outros sistemas."
+          />
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <input
+              type="checkbox"
+              id="includeExisting"
+              checked={includeExisting}
+              onChange={(e) => setIncludeExisting(e.target.checked)}
+            />
+            <label htmlFor="includeExisting" style={{ cursor: "pointer" }}>
+              Incluir todos os prontuários já cadastrados do paciente
+            </label>
+          </div>
+          <div className={styles.buttons} style={{ marginTop: "1rem" }}>
+            <Button
+              onClick={() => setIsGenerateModalOpen(false)}
+              style={{ backgroundColor: "var(--color-text-secondary)" }}
+              disabled={isGenerating}
+            >
+              Cancelar
+            </Button>
+            <Button onClick={handleGenerateContext} disabled={isGenerating}>
+              {isGenerating ? "Solicitando..." : "Gerar"}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
