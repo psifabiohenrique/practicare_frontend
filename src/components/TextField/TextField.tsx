@@ -6,6 +6,7 @@ interface TextFieldProps {
   type?: string;
   value?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void;
   required?: boolean;
   name?: string;
 }
@@ -16,6 +17,7 @@ export default function TextField({
   type,
   value,
   onChange,
+  onPaste,
   required,
   name,
 }: TextFieldProps) {
@@ -27,6 +29,7 @@ export default function TextField({
         type={type}
         value={value}
         onChange={onChange}
+        onPaste={onPaste}
         placeholder={placeholder}
         required={required}
       />

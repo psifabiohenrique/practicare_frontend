@@ -56,6 +56,36 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
     }
   }, [uuid]);
 
+  const handleBirthDatePaste = (
+    event: React.ClipboardEvent<HTMLInputElement>
+  ) => {
+    const pastedText = event.clipboardData.getData("text").trim();
+
+    // DD/MM/YYYY or DD-MM-YYYY
+    const brDateRegex = /^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/;
+    // YYYY-MM-DD or YYYY/MM/DD
+    const isoDateRegex = /^(\d{4})[/-](\d{1,2})[/-](\d{1,2})$/;
+
+    let formattedDate = "";
+
+    const brMatch = pastedText.match(brDateRegex);
+    if (brMatch) {
+      const [, day, month, year] = brMatch;
+      formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    } else {
+      const isoMatch = pastedText.match(isoDateRegex);
+      if (isoMatch) {
+        const [, year, month, day] = isoMatch;
+        formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+      }
+    }
+
+    if (formattedDate) {
+      event.preventDefault();
+      setBirthDate(formattedDate);
+    }
+  };
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -166,6 +196,7 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
             type="date"
             value={birthDate}
             onChange={(e) => setBirthDate(e.target.value)}
+            onPaste={handleBirthDatePaste}
           />
           <SelectField
             label="Gênero"
