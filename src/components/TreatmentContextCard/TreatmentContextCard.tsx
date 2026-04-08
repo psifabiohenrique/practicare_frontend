@@ -267,6 +267,7 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
         isOpen={isGenerateModalOpen}
         onClose={() => !isGenerating && setIsGenerateModalOpen(false)}
         title="Re-gerar Contexto com a IA"
+        closeOnOverlayClick={false}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)" }}>

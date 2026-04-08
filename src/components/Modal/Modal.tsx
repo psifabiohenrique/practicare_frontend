@@ -7,13 +7,26 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: ReactNode;
+  closeOnOverlayClick?: boolean;
 }
 
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  closeOnOverlayClick = true,
+}: ModalProps) {
   if (!isOpen) return null;
 
+  const handleOverlayClick = () => {
+    if (closeOnOverlayClick) {
+      onClose();
+    }
+  };
+
   return createPortal(
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <header className={styles.modalHeader}>
           <h2>{title}</h2>

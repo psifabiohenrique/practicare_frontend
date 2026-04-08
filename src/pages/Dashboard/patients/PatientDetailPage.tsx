@@ -178,6 +178,11 @@ export function PatientDetailPage() {
         isOpen={!!modalState.type}
         onClose={handleCloseModal}
         title={getModalTitle()}
+        closeOnOverlayClick={
+          !["record_form", "report_form", "patient_form"].includes(
+            modalState.type || ""
+          )
+        }
       >
         {renderModalContent()}
       </Modal>
