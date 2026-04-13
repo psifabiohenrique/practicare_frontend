@@ -18,15 +18,24 @@ interface PatientFormProps {
   uuid?: string;
   onSuccess?: () => void;
 }
-
 export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
+  const days: Weekdays[] = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [gender, setGender] = useState<Gender>("Other");
-  const [weekday, setWeekday] = useState<Weekdays>("Monday");
+  const [weekday, setWeekday] = useState<Weekdays>(days[new Date().getDay()]);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [userUUID, setUserUUID] = useState<string>("");
@@ -130,7 +139,7 @@ export function PatientForm({ uuid, onSuccess }: PatientFormProps) {
         setPhone("");
         setBirthDate("");
         setGender("Other");
-        setWeekday("Monday");
+        setWeekday(days[new Date().getDay()]);
         setStartTime("");
         setEndTime("");
       }
