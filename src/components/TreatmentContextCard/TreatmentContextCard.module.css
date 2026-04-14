@@ -48,25 +48,259 @@
   gap: var(--space-xs);
 }
 
+/* ─── Current context bullets ─────────────────────────────── */
+.bulletList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bulletItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.bulletDot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  margin-top: 7px;
+}
+
+.bulletText {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.bulletRemoved {
+  text-decoration: line-through;
+  opacity: 0.45;
+}
+
+/* ─── Draft suggestions box ───────────────────────────────── */
 .draftBox {
   border: 1px solid var(--color-warning);
   border-left: 4px solid var(--color-warning);
-  padding: var(--space-sm);
   border-radius: var(--radius-sm);
   background-color: rgba(202, 138, 4, 0.05);
+  overflow: hidden;
+}
+
+.draftHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--space-sm) - 2px) var(--space-sm);
+  background-color: rgba(202, 138, 4, 0.08);
+  border-bottom: 1px solid rgba(202, 138, 4, 0.2);
 }
 
 .draftLabel {
   font-size: var(--font-size-sm);
   font-weight: bold;
   color: var(--color-warning);
-  margin-bottom: var(--space-xs);
-  display: block;
 }
 
+.draftActions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.draftBody {
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.draftSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.draftSectionLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.draftSectionLabel.add {
+  color: var(--color-success);
+}
+
+.draftSectionLabel.remove {
+  color: var(--color-error);
+}
+
+/* ─── Individual suggestion bullets ──────────────────────────*/
+.suggestionItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
+}
+
+.suggestionItem:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.suggestionItem.addItem {
+  border-left: 2px solid var(--color-success);
+}
+
+.suggestionItem.removeItem {
+  border-left: 2px solid var(--color-error);
+}
+
+.suggestionText {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.suggestionBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.suggestionBtn.acceptBtn {
+  background-color: rgba(22, 163, 74, 0.1);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.suggestionBtn.acceptBtn:hover {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.suggestionBtn.removeBtn {
+  background-color: rgba(220, 38, 38, 0.08);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.suggestionBtn.removeBtn:hover {
+  background-color: var(--color-error);
+  color: white;
+}
+
+/* ─── Not found warning ──────────────────────────────────────*/
+.notFoundWarning {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 11px;
+  color: var(--color-warning);
+  background-color: rgba(202, 138, 4, 0.08);
+  border: 1px solid rgba(202, 138, 4, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  margin-top: 2px;
+}
+
+/* ─── Bullet line editor ──────────────────────────────────── */
+.bulletEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bulletEditorRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.bulletEditorInput {
+  flex: 1;
+  padding: 5px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-surface);
+  transition: border-color 0.15s ease;
+  outline: none;
+}
+
+.bulletEditorInput:focus {
+  border-color: var(--color-primary);
+}
+
+.iconBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: all 0.15s ease;
+}
+
+.iconBtn:hover {
+  background-color: rgba(220, 38, 38, 0.08);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.addLineBtn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--color-border);
+  background: none;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.addLineBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ─── Misc ───────────────────────────────────────────────────*/
 .emptyState {
   color: var(--color-text-secondary);
   font-style: italic;
+  font-size: var(--font-size-sm);
 }
 
 .editorContainer {
@@ -79,30 +313,11 @@
   display: flex;
   gap: var(--space-sm);
   justify-content: flex-end;
-}
-.markdownContent {
-  color: var(--color-text-primary);
-  line-height: 1.6;
+  flex-wrap: wrap;
 }
 
-.markdownContent p {
-  margin: 0 0 1rem 0;
-}
-
-.markdownContent p:last-child {
-  margin-bottom: 0;
-}
-
-.markdownContent ul {
-  margin: 0.5rem 0;
-  padding-left: 1.5rem;
-  list-style-type: disc;
-}
-
-.markdownContent li {
-  margin-bottom: 0.25rem;
-}
-
-.markdownContent li:last-child {
-  margin-bottom: 0;
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
