@@ -29,7 +29,9 @@ type FieldKey =
   | "clinical_history"
   | "psychological_patterns"
   | "therapeutic_goals"
-  | "medication_notes";
+  | "medication_notes"
+  | "techniques"
+  | "requested_activities";
 
 const FIELDS: { key: FieldKey; label: string }[] = [
   { key: "life_dynamics", label: "Dinâmicas de Vida" },
@@ -37,6 +39,8 @@ const FIELDS: { key: FieldKey; label: string }[] = [
   { key: "psychological_patterns", label: "Padrões Psicológicos" },
   { key: "therapeutic_goals", label: "Objetivos Terapêuticos" },
   { key: "medication_notes", label: "Medicações" },
+  { key: "techniques", label: "Técnicas/Procedimentos" },
+  { key: "requested_activities", label: "Atividades Solicitadas" },
 ];
 
 // ─── Bullet line editor sub-component ──────────────────────────────────────
@@ -268,12 +272,12 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
 
   // editValues: what we'll save — list of bullets per field
   const [editValues, setEditValues] = useState<Record<FieldKey, string[]>>(
-    () => Object.fromEntries(FIELDS.map((f) => [f.key, []])) as Record<FieldKey, string[]>
+    () => Object.fromEntries(FIELDS.map((f) => [f.key, []] as [FieldKey, string[]])) as Record<FieldKey, string[]>
   );
 
   // Track which "remove" bullets weren't found in context
   const [notFoundMap, setNotFoundMap] = useState<Record<FieldKey, Set<string>>>(
-    () => Object.fromEntries(FIELDS.map((f) => [f.key, new Set<string>()])) as Record<FieldKey, Set<string>>
+    () => Object.fromEntries(FIELDS.map((f) => [f.key, new Set<string>()] as [FieldKey, Set<string>])) as Record<FieldKey, Set<string>>
   );
 
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
@@ -359,7 +363,7 @@ export function TreatmentContextCard({ treatmentId, refreshKey }: Props) {
     if (!diff) return;
 
     setEditValues((prev) => {
-      let current = [...(prev[field] ?? [])];
+      const current = [...(prev[field] ?? [])];
       // Add items not already present
       for (const b of diff.add) {
         if (!current.includes(b)) current.push(b);

@@ -13,6 +13,8 @@ export interface TreatmentContext {
   psychological_patterns: ContextField;
   therapeutic_goals: ContextField;
   medication_notes: ContextField;
+  techniques: ContextField;
+  requested_activities: ContextField;
   is_update_scheduled: boolean;
   created_at: string;
   updated_at: string;
@@ -27,6 +29,8 @@ export interface TreatmentContextDraft {
   psychological_patterns: ContextFieldDiff | null;
   therapeutic_goals: ContextFieldDiff | null;
   medication_notes: ContextFieldDiff | null;
+  techniques: ContextFieldDiff | null;
+  requested_activities: ContextFieldDiff | null;
   is_applied: boolean;
   created_at: string;
 }
@@ -43,6 +47,8 @@ export interface TreatmentContextUpdatePayload {
   psychological_patterns?: ContextField;
   therapeutic_goals?: ContextField;
   medication_notes?: ContextField;
+  techniques?: ContextField;
+  requested_activities?: ContextField;
 }
 
 export interface TreatmentContextGeneratePayload {
