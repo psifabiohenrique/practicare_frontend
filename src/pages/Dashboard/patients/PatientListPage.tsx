@@ -193,25 +193,27 @@ export function PatientListPage() {
             orderDir={params.order_dir}
           />
 
-          <div className={styles.pagination}>
-            <Button
-              onClick={() =>
-                handlePageChange(Math.max(0, (params.skip || 0) - 25))
-              }
-              disabled={(params.skip || 0) === 0}
-            >
-              Anterior
-            </Button>
-            <span className={styles.pageInfo}>
-              Página {pagination.page} de {pagination.pages}
-            </span>
-            <Button
-              onClick={() => handlePageChange((params.skip || 0) + 25)}
-              disabled={pagination.page >= pagination.pages}
-            >
-              Próxima
-            </Button>
-          </div>
+          {pagination.total > 0 && (
+            <div className={styles.pagination}>
+              <Button
+                onClick={() =>
+                  handlePageChange(Math.max(0, (params.skip || 0) - 25))
+                }
+                disabled={(params.skip || 0) === 0}
+              >
+                Anterior
+              </Button>
+              <span className={styles.pageInfo}>
+                Página {pagination.page} de {pagination.pages}
+              </span>
+              <Button
+                onClick={() => handlePageChange((params.skip || 0) + 25)}
+                disabled={pagination.page >= pagination.pages}
+              >
+                Próxima
+              </Button>
+            </div>
+          )}
         </>
       )}
     </div>

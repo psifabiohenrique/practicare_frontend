@@ -90,25 +90,27 @@ export function RecordList({
         )}
       </div>
 
-      <div className={styles.pagination}>
-        <Button
-          onClick={() =>
-            setParams({ ...params, skip: Math.max(0, params.skip - 4) })
-          }
-          disabled={params.skip === 0 || isLoading}
-        >
-          Anterior
-        </Button>
-        <span className={styles.pageInfo}>
-          Página {pagination.page} de {pagination.pages}
-        </span>
-        <Button 
-          onClick={() => setParams({ ...params, skip: params.skip + 4 })}
-          disabled={isLoading || pagination.page >= pagination.pages}
-        >
-          Próximo
-        </Button>
-      </div>
+      {pagination.total > 0 && (
+        <div className={styles.pagination}>
+          <Button
+            onClick={() =>
+              setParams({ ...params, skip: Math.max(0, params.skip - 4) })
+            }
+            disabled={params.skip === 0 || isLoading}
+          >
+            Anterior
+          </Button>
+          <span className={styles.pageInfo}>
+            Página {pagination.page} de {pagination.pages}
+          </span>
+          <Button 
+            onClick={() => setParams({ ...params, skip: params.skip + 4 })}
+            disabled={isLoading || pagination.page >= pagination.pages}
+          >
+            Próximo
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
