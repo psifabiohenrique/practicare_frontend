@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { PatientList } from "../../../components/PatientList/PatientList";
 import { listPatients } from "../../../api/patient.service";
+import type { PaginatedResponse } from "../../../types/pagination";
 import type {
   Patient,
   PatientListParams,
@@ -15,6 +16,12 @@ import styles from "./PatientListPage.module.css";
 
 export function PatientListPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [pagination, setPagination] = useState<Omit<PaginatedResponse<Patient>, "items">>({
+    total: 0,
+    page: 1,
+    size: 25,
+    pages: 0,
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [params, setParams] = useState<PatientListParams>({
     skip: 0,
@@ -35,7 +42,13 @@ export function PatientListPage() {
     setIsLoading(true);
     try {
       const data = await listPatients(params);
-      setPatients(data);
+      setPatients(data.items);
+      setPagination({
+        total: data.total,
+        page: data.page,
+        size: data.size,
+        pages: data.pages,
+      });
     } catch (error) {
       console.error("Erro ao buscar pacientes:", error);
     } finally {
@@ -68,7 +81,13 @@ export function PatientListPage() {
     setIsLoading(true);
     try {
       const data = await listPatients(p);
-      setPatients(data);
+      setPatients(data.items);
+      setPagination({
+        total: data.total,
+        page: data.page,
+        size: data.size,
+        pages: data.pages,
+      });
     } catch (error) {
       console.error("Erro ao buscar pacientes:", error);
     } finally {
@@ -183,9 +202,12 @@ export function PatientListPage() {
             >
               Anterior
             </Button>
+            <span className={styles.pageInfo}>
+              Página {pagination.page} de {pagination.pages}
+            </span>
             <Button
               onClick={() => handlePageChange((params.skip || 0) + 25)}
-              disabled={patients.length < 25}
+              disabled={pagination.page >= pagination.pages}
             >
               Próxima
             </Button>

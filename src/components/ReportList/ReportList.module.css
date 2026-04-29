@@ -34,6 +34,13 @@
 
 .pagination {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
   margin-top: var(--space-md);
+}
+
+.pageInfo {
+  font-weight: 500;
+  color: var(--color-text-secondary);
 }

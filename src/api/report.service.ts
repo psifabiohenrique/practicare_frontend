@@ -1,4 +1,5 @@
 import { api } from "./axios";
+import type { PaginatedResponse } from "../types/pagination";
 import type {
   Report,
   ReportPayload,
@@ -10,8 +11,8 @@ import type {
 export async function listReports(
   treatment_uuid: string,
   params: ReportListParams,
-) {
-  const response = await api.get<Report[]>(
+): Promise<PaginatedResponse<Report>> {
+  const response = await api.get<PaginatedResponse<Report>>(
     `/treatment-reports/treatment/${treatment_uuid}`,
     { params },
   );

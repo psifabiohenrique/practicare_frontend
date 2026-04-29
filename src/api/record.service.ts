@@ -1,4 +1,5 @@
 import { api } from "./axios";
+import type { PaginatedResponse } from "../types/pagination";
 import type {
   Record,
   RecordUpdatePayload,
@@ -9,8 +10,8 @@ import type {
 export async function listRecords(
   treatment_uuid: string,
   params?: RecordListParams,
-): Promise<Record[]> {
-  const response = await api.get(
+): Promise<PaginatedResponse<Record>> {
+  const response = await api.get<PaginatedResponse<Record>>(
     `/treatment-records/treatment/${treatment_uuid}`,
     { params },
   );

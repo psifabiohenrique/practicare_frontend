@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback } from "react";
 import { type Record } from "../../types/record";
 import { listRecords } from "../../api/record.service";
 import type { ModalType } from "../../pages/Dashboard/patients/PatientDetailPage";
+import type { PaginatedResponse } from "../../types/pagination";
 
 interface RecordListProps {
   treatmentId: string;
@@ -19,13 +20,25 @@ export function RecordList({
 }: RecordListProps) {
   const [records, setRecords] = useState<Record[]>([]);
   const [params, setParams] = useState({ skip: 0, limit: 4, include_archived: false });
+  const [pagination, setPagination] = useState<Omit<PaginatedResponse<Record>, "items">>({
+    total: 0,
+    page: 1,
+    size: 4,
+    pages: 0,
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchRecords = useCallback(async () => {
     setIsLoading(true);
     try {
-      const records = await listRecords(treatmentId, params);
-      setRecords(records);
+      const data = await listRecords(treatmentId, params);
+      setRecords(data.items);
+      setPagination({
+        total: data.total,
+        page: data.page,
+        size: data.size,
+        pages: data.pages,
+      });
     } catch (err) {
       console.error("Error fetching records:", err);
     } finally {
@@ -86,9 +99,12 @@ export function RecordList({
         >
           Anterior
         </Button>
+        <span className={styles.pageInfo}>
+          Página {pagination.page} de {pagination.pages}
+        </span>
         <Button 
           onClick={() => setParams({ ...params, skip: params.skip + 4 })}
-          disabled={isLoading}
+          disabled={isLoading || pagination.page >= pagination.pages}
         >
           Próximo
         </Button>

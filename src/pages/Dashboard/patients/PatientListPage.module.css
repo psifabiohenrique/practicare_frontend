@@ -25,8 +25,14 @@
 .pagination {
   margin-top: var(--space-xl, 2rem);
   display: flex;
-  gap: var(--space-sm);
+  gap: var(--space-md);
   justify-content: center;
+  align-items: center;
+}
+
+.pageInfo {
+  font-weight: 500;
+  color: var(--color-text-secondary);
 }
 
 @media (max-width: 768px) {

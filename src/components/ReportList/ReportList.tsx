@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback } from "react";
 import { type Report } from "../../types/report";
 import { listReports } from "../../api/report.service";
 import type { ModalType } from "../../pages/Dashboard/patients/PatientDetailPage";
+import type { PaginatedResponse } from "../../types/pagination";
 
 interface ReportListProps {
   treatmentId: string;
@@ -19,13 +20,25 @@ export function ReportList({
 }: ReportListProps) {
   const [reports, setReports] = useState<Report[]>([]);
   const [params, setParams] = useState({ skip: 0, limit: 4, include_archived: false });
+  const [pagination, setPagination] = useState<Omit<PaginatedResponse<Report>, "items">>({
+    total: 0,
+    page: 1,
+    size: 4,
+    pages: 0,
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchReports = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await listReports(treatmentId, params);
-      setReports(data);
+      setReports(data.items);
+      setPagination({
+        total: data.total,
+        page: data.page,
+        size: data.size,
+        pages: data.pages,
+      });
     } catch (err) {
       console.error("Error fetching reports:", err);
     } finally {
@@ -87,9 +100,12 @@ export function ReportList({
         >
           Anterior
         </Button>
+        <span className={styles.pageInfo}>
+          Página {pagination.page} de {pagination.pages}
+        </span>
         <Button 
           onClick={() => setParams({ ...params, skip: params.skip + 4 })}
-          disabled={isLoading}
+          disabled={isLoading || pagination.page >= pagination.pages}
         >
           Próximo
         </Button>
